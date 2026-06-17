@@ -1,1698 +1,1948 @@
+cat > /mnt/user-data/outputs/good-touch-bad-touch.html << 'HTMLEOF'
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Safe Touch — Learn, Explore & Stay Safe</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>SafeTouch India — Body Safety Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
-    --primary: #6C63FF;
-    --primary-light: #EEF0FF;
-    --primary-dark: #4A43CC;
-    --safe: #22C55E;
-    --safe-light: #DCFCE7;
-    --safe-dark: #15803D;
-    --unsafe: #EF4444;
-    --unsafe-light: #FEE2E2;
-    --unsafe-dark: #B91C1C;
-    --caution: #F59E0B;
-    --caution-light: #FEF3C7;
-    --neutral: #64748B;
-    --bg: #F8F7FF;
-    --card: #FFFFFF;
-    --text: #1E1B4B;
-    --muted: #6B7280;
-    --border: #E5E7EB;
-    --radius: 16px;
-    --radius-sm: 8px;
-    --shadow: 0 4px 24px rgba(108,99,255,0.08);
-    --shadow-card: 0 2px 12px rgba(0,0,0,0.07);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  nav {
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-    box-shadow: 0 2px 12px rgba(108,99,255,0.06);
-  }
-
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Baloo 2', cursive;
-    font-weight: 700;
-    font-size: 1.3rem;
-    color: var(--primary);
-    text-decoration: none;
-  }
-
-  .nav-brand .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--primary);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 18px;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 4px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    color: var(--muted);
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-
-  .nav-links a:hover, .nav-links a.active {
-    background: var(--primary-light);
-    color: var(--primary);
-  }
-
-  .hero {
-    background: linear-gradient(135deg, #6C63FF 0%, #A78BFA 50%, #C4B5FD 100%);
-    color: white;
-    padding: 5rem 2rem 4rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    width: 400px; height: 400px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 50%;
-    top: -100px; right: -100px;
-  }
-
-  .hero::after {
-    content: '';
-    position: absolute;
-    width: 300px; height: 300px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 50%;
-    bottom: -80px; left: -60px;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.2);
-    padding: 6px 16px;
-    border-radius: 100px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.5px;
-  }
-
-  .hero h1 {
-    font-family: 'Baloo 2', cursive;
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
-    font-weight: 700;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-
-  .hero p {
-    font-size: 1.1rem;
-    max-width: 560px;
-    margin: 0 auto 2.5rem;
-    opacity: 0.9;
-    line-height: 1.7;
-  }
-
-  .hero-buttons {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    padding: 12px 28px;
-    border-radius: 100px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .btn-white {
-    background: white;
-    color: var(--primary);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  }
-
-  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-
-  .btn-outline-white {
-    background: rgba(255,255,255,0.15);
-    color: white;
-    border: 2px solid rgba(255,255,255,0.5);
-  }
-
-  .btn-outline-white:hover { background: rgba(255,255,255,0.25); }
-
-  .stats-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 3rem;
-    padding: 0 2rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .stat-card {
-    background: white;
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    text-align: center;
-    box-shadow: var(--shadow-card);
-    min-width: 140px;
-  }
-
-  .stat-num {
-    font-family: 'Baloo 2', cursive;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary);
-  }
-
-  .stat-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    font-weight: 600;
-    margin-top: 2px;
-  }
-
-  section {
-    padding: 4rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .section-tag {
-    display: inline-block;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 5px 14px;
-    border-radius: 100px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: 0.8rem;
-  }
-
-  .section-header h2 {
-    font-family: 'Baloo 2', cursive;
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.75rem;
-  }
-
-  .section-header p {
-    color: var(--muted);
-    max-width: 540px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
-
-  .content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  @media (max-width: 900px) { .content-grid { grid-template-columns: 1fr; } }
-
-  .info-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 2rem;
-    box-shadow: var(--shadow-card);
-    border: 1px solid var(--border);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .info-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-
-  .info-card.safe { border-top: 4px solid var(--safe); }
-  .info-card.unsafe { border-top: 4px solid var(--unsafe); }
-
-  .card-icon {
-    width: 52px; height: 52px;
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-  }
-
-  .card-icon.safe { background: var(--safe-light); }
-  .card-icon.unsafe { background: var(--unsafe-light); }
-
-  .info-card h3 {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    color: var(--text);
-  }
-
-  .tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 1rem;
-  }
-
-  .tag {
-    padding: 5px 12px;
-    border-radius: 100px;
-    font-size: 0.8rem;
-    font-weight: 600;
-  }
-
-  .tag.safe { background: var(--safe-light); color: var(--safe-dark); }
-  .tag.unsafe { background: var(--unsafe-light); color: var(--unsafe-dark); }
-  .tag.neutral { background: #F3F4F6; color: var(--muted); }
-
-  .rules-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-    margin-top: 2rem;
-  }
-
-  .rule-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-card);
-    border: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .rule-num {
-    width: 40px; height: 40px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700;
-    font-size: 1rem;
-    margin: 0 auto 1rem;
-  }
-
-  .rule-card h4 {
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
-
-  .rule-card p {
-    font-size: 0.875rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  #body-map-section {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 2.5rem;
-    box-shadow: var(--shadow-card);
-    border: 1px solid var(--border);
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .body-map-layout {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 2rem;
-    align-items: start;
-  }
-
-  @media (max-width: 700px) { .body-map-layout { grid-template-columns: 1fr; } }
-
-  .body-map-container {
-    position: relative;
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-  }
-
-  .body-svg-wrap {
-    position: relative;
-    width: 100%;
-  }
-
-  .body-svg-wrap svg {
-    width: 100%;
-    height: auto;
-  }
-
-  .body-zone {
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .body-zone:hover { opacity: 0.75; }
-
-  .zone-info-panel {
-    background: var(--bg);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    border: 1px solid var(--border);
-    min-height: 200px;
-  }
-
-  .zone-info-panel.safe-zone { border-color: var(--safe); background: var(--safe-light); }
-  .zone-info-panel.unsafe-zone { border-color: var(--unsafe); background: var(--unsafe-light); }
-  .zone-info-panel.caution-zone { border-color: var(--caution); background: var(--caution-light); }
-
-  .zone-info-panel h4 {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-
-  .zone-info-panel .zone-type-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 100px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-  }
-
-  .zone-info-panel.safe-zone .zone-type-badge { background: var(--safe); color: white; }
-  .zone-info-panel.unsafe-zone .zone-type-badge { background: var(--unsafe); color: white; }
-  .zone-info-panel.caution-zone .zone-type-badge { background: var(--caution); color: white; }
-
-  .zone-info-panel p { font-size: 0.9rem; color: var(--text); line-height: 1.7; }
-
-  .map-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 1.5rem;
-  }
-
-  .legend-dot {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--muted);
-  }
-
-  .legend-dot .dot {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-  }
-
-  #quiz-section {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-
-  .quiz-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 2.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-  }
-
-  .quiz-progress-bar {
-    height: 8px;
-    background: var(--border);
-    border-radius: 100px;
-    margin-bottom: 2rem;
-    overflow: hidden;
-  }
-
-  .quiz-progress-fill {
-    height: 100%;
-    background: var(--primary);
-    border-radius: 100px;
-    transition: width 0.4s ease;
-  }
-
-  .quiz-counter {
-    font-size: 0.85rem;
-    color: var(--muted);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  .quiz-question {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    line-height: 1.4;
-    color: var(--text);
-  }
-
-  .quiz-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .quiz-opt {
-    padding: 14px 18px;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--border);
-    background: white;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text);
-    transition: all 0.18s;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .quiz-opt:hover:not(:disabled) {
-    border-color: var(--primary);
-    background: var(--primary-light);
-  }
-
-  .quiz-opt .opt-letter {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 700;
-    flex-shrink: 0;
-    transition: all 0.18s;
-  }
-
-  .quiz-opt.correct { border-color: var(--safe); background: var(--safe-light); }
-  .quiz-opt.correct .opt-letter { background: var(--safe); border-color: var(--safe); color: white; }
-
-  .quiz-opt.wrong { border-color: var(--unsafe); background: var(--unsafe-light); }
-  .quiz-opt.wrong .opt-letter { background: var(--unsafe); border-color: var(--unsafe); color: white; }
-
-  .quiz-opt.selected { border-color: var(--primary); background: var(--primary-light); }
-
-  .quiz-feedback {
-    margin-top: 1.5rem;
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: none;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .quiz-feedback.correct { background: var(--safe-light); color: var(--safe-dark); display: flex; }
-  .quiz-feedback.wrong { background: var(--unsafe-light); color: var(--unsafe-dark); display: flex; }
-
-  .quiz-next-btn {
-    margin-top: 1.5rem;
-    padding: 12px 28px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 100px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-    display: none;
-    transition: all 0.2s;
-  }
-
-  .quiz-next-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
-
-  .quiz-result {
-    text-align: center;
-    padding: 2rem 0;
-    display: none;
-  }
-
-  .result-circle {
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    background: var(--primary-light);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    margin: 0 auto 1.5rem;
-    border: 4px solid var(--primary);
-  }
-
-  .result-score {
-    font-family: 'Baloo 2', cursive;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    line-height: 1;
-  }
-
-  .result-total { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
-
-  #game-section {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .game-wrapper {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 2.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-  }
-
-  .game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-
-  .game-score-box {
-    display: flex;
-    gap: 1.5rem;
-  }
-
-  .game-score-item {
-    text-align: center;
-  }
-
-  .game-score-num {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-
-  .game-score-num.correct { color: var(--safe); }
-  .game-score-num.wrong { color: var(--unsafe); }
-  .game-score-num.timer { color: var(--primary); }
-
-  .game-score-label { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
-
-  .game-scenario-card {
-    background: var(--bg);
-    border-radius: var(--radius);
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid var(--border);
-    text-align: center;
-    min-height: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .scenario-emoji { font-size: 3rem; }
-
-  .scenario-text {
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.5;
-    color: var(--text);
-    max-width: 480px;
-  }
-
-  .game-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .game-btn {
-    padding: 14px 40px;
-    border-radius: 100px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: all 0.18s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .game-btn.good { background: var(--safe); color: white; }
-  .game-btn.good:hover { background: var(--safe-dark); transform: scale(1.04); }
-
-  .game-btn.bad { background: var(--unsafe); color: white; }
-  .game-btn.bad:hover { background: var(--unsafe-dark); transform: scale(1.04); }
-
-  .game-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  .game-feedback {
-    margin-top: 1.25rem;
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-align: center;
-    display: none;
-  }
-
-  .game-feedback.show { display: block; }
-  .game-feedback.correct { background: var(--safe-light); color: var(--safe-dark); }
-  .game-feedback.wrong { background: var(--unsafe-light); color: var(--unsafe-dark); }
-
-  .game-next-btn {
-    margin-top: 1rem;
-    padding: 10px 24px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 100px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: none;
-    transition: background 0.2s;
-  }
-
-  .game-next-btn.show { display: inline-flex; align-items: center; gap: 6px; }
-  .game-next-btn:hover { background: var(--primary-dark); }
-
-  .game-end {
-    text-align: center;
-    padding: 2rem 0;
-    display: none;
-  }
-
-  .tip-accordion {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-
-  .tip-item {
-    background: var(--card);
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-
-  .tip-header {
-    padding: 1.1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--text);
-    transition: background 0.2s;
-  }
-
-  .tip-header:hover { background: var(--bg); }
-
-  .tip-header .tip-icon { font-size: 1.2rem; margin-right: 10px; }
-  .tip-header .tip-arrow { font-size: 1rem; color: var(--muted); transition: transform 0.25s; }
-  .tip-header.open .tip-arrow { transform: rotate(180deg); }
-
-  .tip-body {
-    padding: 0 1.5rem;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s;
-    font-size: 0.9rem;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  .tip-body.open { max-height: 400px; padding: 0 1.5rem 1.25rem; }
-
-  footer {
-    background: #1E1B4B;
-    color: #A5B4FC;
-    padding: 3rem 2rem;
-    text-align: center;
-  }
-
-  footer .footer-logo {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 1rem;
-  }
-
-  footer p { font-size: 0.875rem; line-height: 1.7; max-width: 500px; margin: 0 auto; }
-
-  .emergency-banner {
-    background: #FEF2F2;
-    border: 1.5px solid #FCA5A5;
-    border-radius: var(--radius);
-    padding: 1.25rem 1.75rem;
-    margin: 2rem auto;
-    max-width: 720px;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .emergency-icon { font-size: 2rem; flex-shrink: 0; }
-
-  .emergency-banner h4 { font-weight: 700; color: #991B1B; font-size: 1rem; margin-bottom: 0.25rem; }
-  .emergency-banner p { font-size: 0.875rem; color: #B91C1C; line-height: 1.6; }
-
-  [id] { scroll-margin-top: 80px; }
-
-  .main-tabs {
-    display: flex;
-    gap: 8px;
-    background: var(--card);
-    padding: 6px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    max-width: fit-content;
-    margin: 0 auto 3rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .main-tab {
-    padding: 10px 22px;
-    border-radius: 100px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    transition: all 0.2s;
-  }
-
-  .main-tab.active {
-    background: var(--primary);
-    color: white;
-    box-shadow: 0 4px 12px rgba(108,99,255,0.3);
-  }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  .highlight-box {
-    background: var(--primary-light);
-    border-left: 4px solid var(--primary);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    padding: 1rem 1.25rem;
-    margin: 1rem 0;
-    font-size: 0.9rem;
-    color: #3730A3;
-    line-height: 1.6;
-  }
-
-  .info-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 0.75rem;
-  }
-
-  .info-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 0.875rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .info-list li::before {
-    content: '✓';
-    color: var(--safe);
-    font-weight: 700;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .info-list.bad li::before { content: '✗'; color: var(--unsafe); }
-
-  .game-start-screen {
-    text-align: center;
-    padding: 2rem 0;
-  }
-
-  .start-big-icon { font-size: 4rem; margin-bottom: 1rem; }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-
-  .pulse { animation: pulse 2s infinite; }
+:root {
+  --p: #7C3AED;
+  --p2: #6D28D9;
+  --p3: #5B21B6;
+  --pl: #EDE9FE;
+  --pl2: #DDD6FE;
+  --safe: #059669;
+  --safel: #D1FAE5;
+  --safed: #064E3B;
+  --danger: #DC2626;
+  --dangerl: #FEE2E2;
+  --dangerd: #7F1D1D;
+  --warn: #D97706;
+  --warnl: #FEF3C7;
+  --bg: #0F0A1E;
+  --bg2: #160D2E;
+  --bg3: #1E1040;
+  --card: #1A0F35;
+  --card2: #221545;
+  --glass: rgba(124,58,237,0.08);
+  --border: rgba(124,58,237,0.2);
+  --border2: rgba(255,255,255,0.06);
+  --text: #F1EEFF;
+  --text2: #C4B5FD;
+  --text3: #A78BFA;
+  --muted: #7C6FAF;
+  --r: 16px;
+  --rsm: 10px;
+  --rlg: 24px;
+  --sh: 0 8px 32px rgba(124,58,237,0.25);
+  --sh2: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+body.hindi-mode{font-family:'Noto Sans Devanagari','Inter',sans-serif;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--p);border-radius:3px;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(15,10,30,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  height:68px;
+  display:flex;align-items:center;
+  padding:0 2rem;
+  gap:1rem;
+}
+
+.nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-size:1.25rem;font-weight:800;
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-decoration:none;white-space:nowrap;
+}
+
+.nav-logo{
+  width:38px;height:38px;border-radius:12px;
+  background:linear-gradient(135deg,var(--p),#4F46E5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;box-shadow:0 4px 12px rgba(124,58,237,0.4);
+  flex-shrink:0;
+}
+
+.nav-links{
+  display:flex;gap:2px;list-style:none;
+  background:rgba(255,255,255,0.04);
+  padding:4px;border-radius:100px;
+  border:1px solid var(--border2);
+  flex-wrap:wrap;
+}
+
+.nav-links a{
+  padding:7px 14px;border-radius:100px;
+  text-decoration:none;color:var(--muted);
+  font-weight:600;font-size:0.82rem;
+  transition:all 0.2s;cursor:pointer;white-space:nowrap;
+  letter-spacing:0.2px;
+}
+
+.nav-links a:hover,.nav-links a.active{
+  background:var(--p);color:white;
+  box-shadow:0 4px 12px rgba(124,58,237,0.4);
+}
+
+/* LANG TOGGLE */
+.lang-toggle{
+  display:flex;align-items:center;gap:0;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:3px;
+  margin-left:auto;
+  flex-shrink:0;
+}
+
+.lang-btn{
+  padding:6px 14px;border-radius:100px;
+  font-size:0.8rem;font-weight:700;
+  border:none;cursor:pointer;
+  transition:all 0.25s;
+  background:transparent;color:var(--muted);
+  letter-spacing:0.3px;
+}
+
+.lang-btn.active{
+  background:linear-gradient(135deg,var(--p),#4F46E5);
+  color:white;
+  box-shadow:0 3px 10px rgba(124,58,237,0.5);
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:100px 2rem 4rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(124,58,237,0.25) 0%,transparent 70%),
+             radial-gradient(ellipse 40% 40% at 20% 80%,rgba(79,70,229,0.15) 0%,transparent 60%),
+             radial-gradient(ellipse 40% 40% at 80% 10%,rgba(167,139,250,0.1) 0%,transparent 60%);
+  z-index:0;
+}
+
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(124,58,237,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(124,58,237,0.06) 1px,transparent 1px);
+  background-size:60px 60px;
+  z-index:0;
+}
+
+.hero-content{position:relative;z-index:1;max-width:800px;}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(124,58,237,0.15);
+  border:1px solid rgba(124,58,237,0.4);
+  padding:8px 20px;border-radius:100px;
+  font-size:0.8rem;font-weight:600;
+  color:var(--text3);margin-bottom:2rem;
+  letter-spacing:0.5px;
+  backdrop-filter:blur(10px);
+}
+
+.hero h1{
+  font-size:clamp(2.8rem,6vw,5rem);
+  font-weight:900;line-height:1.1;
+  margin-bottom:1.5rem;
+  letter-spacing:-1px;
+}
+
+.hero h1 .grad{
+  background:linear-gradient(135deg,#A78BFA 0%,#7C3AED 40%,#6366F1 70%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+  font-size:1.15rem;color:var(--text2);
+  max-width:560px;margin:0 auto 2.5rem;
+  line-height:1.8;font-weight:400;
+}
+
+.hero-ctas{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:4rem;
+}
+
+.btn-primary{
+  padding:14px 32px;border-radius:100px;
+  background:linear-gradient(135deg,var(--p),#4F46E5);
+  color:white;font-weight:700;font-size:0.95rem;
+  border:none;cursor:pointer;
+  box-shadow:0 8px 24px rgba(124,58,237,0.4);
+  transition:all 0.25s;letter-spacing:0.3px;
+  display:inline-flex;align-items:center;gap:8px;
+}
+
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(124,58,237,0.55);}
+
+.btn-ghost{
+  padding:14px 32px;border-radius:100px;
+  background:rgba(255,255,255,0.06);
+  color:var(--text);font-weight:700;font-size:0.95rem;
+  border:1px solid var(--border);cursor:pointer;
+  transition:all 0.25s;letter-spacing:0.3px;
+  display:inline-flex;align-items:center;gap:8px;
+  backdrop-filter:blur(10px);
+}
+
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:var(--p);}
+
+.hero-stats{
+  display:flex;gap:1px;
+  background:var(--border2);
+  border:1px solid var(--border2);
+  border-radius:var(--rlg);
+  overflow:hidden;
+  max-width:600px;margin:0 auto;
+}
+
+.hstat{
+  flex:1;padding:1.5rem 1rem;text-align:center;
+  background:rgba(255,255,255,0.03);
+  transition:background 0.2s;
+}
+
+.hstat:hover{background:rgba(124,58,237,0.1);}
+
+.hstat-num{
+  font-size:1.8rem;font-weight:800;
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;margin-bottom:4px;
+}
+
+.hstat-label{font-size:0.75rem;color:var(--muted);font-weight:600;letter-spacing:0.3px;}
+
+/* ── SECTION ── */
+.section{
+  padding:5rem 2rem;
+  max-width:1280px;
+  margin:0 auto;
+}
+
+.stag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(124,58,237,0.12);
+  border:1px solid rgba(124,58,237,0.3);
+  color:var(--text3);
+  padding:5px 14px;border-radius:100px;
+  font-size:0.75rem;font-weight:700;
+  letter-spacing:0.8px;text-transform:uppercase;
+  margin-bottom:1rem;
+}
+
+.shead{
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:800;line-height:1.2;
+  margin-bottom:0.75rem;letter-spacing:-0.5px;
+}
+
+.shead .acc{
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.sdesc{color:var(--text2);max-width:560px;line-height:1.8;font-size:0.95rem;}
+
+.section-header{margin-bottom:3rem;}
+.section-header.center{text-align:center;}
+.section-header.center .sdesc{margin:0 auto;}
+
+/* ── TABS ── */
+.main-tabs{
+  display:flex;gap:4px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border2);
+  padding:5px;border-radius:100px;
+  max-width:fit-content;
+  margin:0 auto 3rem;
+  flex-wrap:wrap;justify-content:center;
+}
+
+.mtab{
+  padding:10px 20px;border-radius:100px;
+  font-weight:600;font-size:0.85rem;
+  cursor:pointer;border:none;
+  background:transparent;color:var(--muted);
+  transition:all 0.22s;white-space:nowrap;
+  letter-spacing:0.2px;
+}
+
+.mtab.active{
+  background:linear-gradient(135deg,var(--p),#4F46E5);
+  color:white;
+  box-shadow:0 4px 14px rgba(124,58,237,0.45);
+}
+
+.mtab:hover:not(.active){color:var(--text2);background:rgba(255,255,255,0.05);}
+
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn 0.3s ease;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+/* ── CARDS ── */
+.glass-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--rlg);
+  padding:2rem;
+  position:relative;
+  overflow:hidden;
+  transition:transform 0.25s,box-shadow 0.25s;
+}
+
+.glass-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,58,237,0.5),transparent);
+}
+
+.glass-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(124,58,237,0.25);
+}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+
+@media(max-width:1000px){.grid-4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+/* INFO CARDS */
+.icard-good{border-top:3px solid var(--safe);}
+.icard-bad{border-top:3px solid var(--danger);}
+
+.icard-icon{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;margin-bottom:1.25rem;
+}
+
+.icard-icon.safe-bg{background:rgba(5,150,105,0.15);border:1px solid rgba(5,150,105,0.3);}
+.icard-icon.bad-bg{background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.25);}
+
+.icard h3{font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;color:var(--text);}
+
+.ilist{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:0.75rem;}
+.ilist li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:0.85rem;color:var(--text2);line-height:1.6;
+}
+.ilist li .dot{
+  width:6px;height:6px;border-radius:50%;
+  flex-shrink:0;margin-top:7px;
+}
+.ilist.good li .dot{background:var(--safe);}
+.ilist.bad li .dot{background:var(--danger);}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.25rem;}
+.pill{
+  padding:4px 12px;border-radius:100px;
+  font-size:0.75rem;font-weight:700;letter-spacing:0.3px;
+}
+.pill.safe{background:rgba(5,150,105,0.15);color:#34D399;border:1px solid rgba(5,150,105,0.3);}
+.pill.bad{background:rgba(220,38,38,0.12);color:#F87171;border:1px solid rgba(220,38,38,0.25);}
+
+/* RULES GRID */
+.rule-card{
+  background:var(--card2);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:1.5rem;text-align:center;
+  transition:all 0.2s;
+}
+.rule-card:hover{border-color:var(--p);background:rgba(124,58,237,0.08);}
+
+.rnum{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,var(--p),#4F46E5);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1rem;color:white;
+  margin:0 auto 1rem;
+  box-shadow:0 4px 12px rgba(124,58,237,0.35);
+}
+
+.rule-card h4{font-size:0.95rem;font-weight:700;margin-bottom:0.5rem;color:var(--text);}
+.rule-card p{font-size:0.82rem;color:var(--muted);line-height:1.6;}
+
+/* HIGHLIGHT */
+.highlight{
+  background:rgba(124,58,237,0.08);
+  border:1px solid rgba(124,58,237,0.25);
+  border-left:4px solid var(--p);
+  border-radius:0 var(--rsm) var(--rsm) 0;
+  padding:1.25rem 1.5rem;
+  margin:1.5rem 0;
+  font-size:0.9rem;color:var(--text2);line-height:1.7;
+}
+
+/* BODY MAP */
+.bodymap-wrap{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--rlg);
+  padding:2.5rem;
+  max-width:960px;margin:0 auto;
+}
+
+.bodymap-layout{
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:2.5rem;align-items:start;
+}
+
+@media(max-width:700px){.bodymap-layout{grid-template-columns:1fr;}}
+
+.body-svg-cont{
+  max-width:280px;margin:0 auto;
+}
+
+.body-zone{cursor:pointer;transition:all 0.18s;}
+.body-zone:hover{filter:brightness(1.15) drop-shadow(0 0 8px rgba(124,58,237,0.5));}
+
+.zone-panel{
+  background:var(--card2);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:1.5rem;
+  min-height:220px;
+  transition:all 0.3s;
+}
+
+.zone-panel.safe-p{border-color:rgba(5,150,105,0.4);background:rgba(5,150,105,0.05);}
+.zone-panel.danger-p{border-color:rgba(220,38,38,0.4);background:rgba(220,38,38,0.05);}
+.zone-panel.caution-p{border-color:rgba(217,119,6,0.4);background:rgba(217,119,6,0.05);}
+
+.zbadge{
+  display:inline-block;padding:4px 12px;border-radius:100px;
+  font-size:0.75rem;font-weight:700;margin-bottom:0.75rem;letter-spacing:0.3px;
+}
+.zbadge.safe{background:rgba(5,150,105,0.2);color:#34D399;}
+.zbadge.danger{background:rgba(220,38,38,0.15);color:#F87171;}
+.zbadge.caution{background:rgba(217,119,6,0.15);color:#FCD34D;}
+
+.zone-panel h4{font-size:1rem;font-weight:700;margin-bottom:0.6rem;color:var(--text);}
+.zone-panel p{font-size:0.85rem;color:var(--text2);line-height:1.7;}
+
+.map-legend{
+  display:flex;flex-wrap:wrap;gap:12px;margin-top:1.5rem;
+}
+.ldot{
+  display:flex;align-items:center;gap:6px;
+  font-size:0.78rem;font-weight:600;color:var(--muted);
+}
+.ldot span{width:10px;height:10px;border-radius:50%;}
+
+/* QUIZ */
+.quiz-shell{max-width:700px;margin:0 auto;}
+
+.quiz-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--rlg);
+  padding:2.5rem;
+}
+
+.qprog-bar{
+  height:6px;background:var(--card2);
+  border-radius:100px;margin-bottom:2rem;overflow:hidden;
+}
+
+.qprog-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--p),#6366F1);
+  border-radius:100px;transition:width 0.4s ease;
+}
+
+.qcounter{font-size:0.8rem;color:var(--muted);font-weight:600;margin-bottom:0.5rem;letter-spacing:0.3px;}
+
+.qquestion{
+  font-size:1.2rem;font-weight:700;
+  margin-bottom:1.75rem;line-height:1.5;
+  color:var(--text);
+}
+
+.qopts{display:flex;flex-direction:column;gap:10px;}
+
+.qopt{
+  padding:13px 16px;
+  border-radius:var(--rsm);
+  border:1px solid var(--border2);
+  background:var(--card2);
+  cursor:pointer;font-size:0.9rem;font-weight:600;
+  color:var(--text2);transition:all 0.18s;
+  text-align:left;display:flex;align-items:center;gap:12px;
+}
+
+.qopt:hover:not(:disabled){border-color:var(--p);background:rgba(124,58,237,0.1);color:var(--text);}
+
+.qletter{
+  width:28px;height:28px;border-radius:8px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;font-weight:700;flex-shrink:0;
+  transition:all 0.18s;
+}
+
+.qopt.correct{border-color:rgba(5,150,105,0.5);background:rgba(5,150,105,0.1);}
+.qopt.correct .qletter{background:var(--safe);border-color:var(--safe);color:white;}
+.qopt.wrong{border-color:rgba(220,38,38,0.5);background:rgba(220,38,38,0.08);}
+.qopt.wrong .qletter{background:var(--danger);border-color:var(--danger);color:white;}
+
+.qfeedback{
+  margin-top:1.25rem;padding:1rem 1.25rem;
+  border-radius:var(--rsm);font-size:0.85rem;font-weight:600;
+  display:none;align-items:flex-start;gap:10px;line-height:1.6;
+}
+
+.qfeedback.correct{background:rgba(5,150,105,0.1);color:#34D399;border:1px solid rgba(5,150,105,0.3);display:flex;}
+.qfeedback.wrong{background:rgba(220,38,38,0.08);color:#F87171;border:1px solid rgba(220,38,38,0.25);display:flex;}
+
+.qnext{
+  margin-top:1.5rem;
+  padding:11px 26px;
+  background:linear-gradient(135deg,var(--p),#4F46E5);
+  color:white;border:none;border-radius:100px;
+  font-weight:700;font-size:0.9rem;cursor:pointer;
+  display:none;transition:all 0.2s;
+  box-shadow:0 4px 14px rgba(124,58,237,0.35);
+}
+.qnext:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.5);}
+
+.qresult{text-align:center;padding:2rem 0;display:none;}
+
+.rcircle{
+  width:130px;height:130px;border-radius:50%;
+  background:rgba(124,58,237,0.1);
+  border:3px solid var(--p);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  margin:0 auto 1.5rem;
+}
+
+.rscore{font-size:2.8rem;font-weight:800;color:var(--p);line-height:1;}
+.rtotal{font-size:0.8rem;color:var(--muted);font-weight:600;}
+
+/* GAME */
+.game-shell{max-width:780px;margin:0 auto;}
+
+.game-wrap{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--rlg);padding:2.5rem;
+}
+
+.ghead{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:2rem;
+}
+
+.gscores{display:flex;gap:1.5rem;}
+
+.gscore-item{text-align:center;}
+
+.gscore-num{font-size:1.6rem;font-weight:800;line-height:1;}
+.gscore-num.green{color:#34D399;}
+.gscore-num.red{color:#F87171;}
+.gscore-num.purple{
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.gscore-lbl{font-size:0.7rem;color:var(--muted);font-weight:600;letter-spacing:0.3px;margin-top:2px;}
+
+.gscenario{
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:var(--r);padding:2rem;
+  margin-bottom:1.5rem;text-align:center;
+  min-height:150px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1rem;
+}
+
+.gemoji{font-size:3.5rem;}
+
+.gtext{
+  font-size:1.05rem;font-weight:600;
+  line-height:1.6;color:var(--text);
+  max-width:500px;
+}
+
+.gbtn-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+
+.gbtn{
+  padding:13px 36px;border-radius:100px;
+  font-size:0.95rem;font-weight:700;
+  cursor:pointer;border:none;
+  transition:all 0.18s;
+  display:flex;align-items:center;gap:8px;
+}
+
+.gbtn.good{
+  background:linear-gradient(135deg,#059669,#047857);
+  color:white;box-shadow:0 4px 14px rgba(5,150,105,0.35);
+}
+.gbtn.good:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(5,150,105,0.5);}
+
+.gbtn.bad{
+  background:linear-gradient(135deg,#DC2626,#B91C1C);
+  color:white;box-shadow:0 4px 14px rgba(220,38,38,0.35);
+}
+.gbtn.bad:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(220,38,38,0.5);}
+
+.gbtn:disabled{opacity:0.45;cursor:not-allowed;transform:none !important;box-shadow:none !important;}
+
+.gfeedback{
+  margin-top:1.25rem;padding:1rem 1.25rem;
+  border-radius:var(--rsm);font-size:0.85rem;font-weight:600;
+  text-align:center;line-height:1.6;display:none;
+}
+.gfeedback.show{display:block;}
+.gfeedback.correct{background:rgba(5,150,105,0.1);color:#34D399;border:1px solid rgba(5,150,105,0.3);}
+.gfeedback.wrong{background:rgba(220,38,38,0.08);color:#F87171;border:1px solid rgba(220,38,38,0.25);}
+
+.gnext{
+  margin-top:1rem;padding:10px 22px;
+  background:linear-gradient(135deg,var(--p),#4F46E5);
+  color:white;border:none;border-radius:100px;
+  font-weight:700;font-size:0.85rem;cursor:pointer;
+  display:none;transition:all 0.2s;
+}
+.gnext.show{display:inline-flex;align-items:center;gap:6px;}
+
+.gstart,.gend{text-align:center;padding:2rem 0;}
+.gbig{font-size:4.5rem;margin-bottom:1rem;}
+
+/* ── DATA / CHARTS ── */
+.chart-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1.5rem;
+}
+
+@media(max-width:900px){.chart-grid{grid-template-columns:1fr;}}
+
+.chart-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--rlg);
+  padding:1.75rem;
+  position:relative;overflow:hidden;
+}
+
+.chart-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,58,237,0.4),transparent);
+}
+
+.chart-title{font-size:0.9rem;font-weight:700;margin-bottom:0.25rem;color:var(--text);}
+.chart-sub{font-size:0.75rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.5;}
+
+.chart-wrap{position:relative;height:260px;}
+
+.chart-card.wide{grid-column:1/-1;}
+
+/* DATA STAT CARDS */
+.data-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.25rem;
+  margin-bottom:2.5rem;
+}
+
+@media(max-width:900px){.data-stats{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.data-stats{grid-template-columns:1fr;}}
+
+.dstat{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.5rem;
+  position:relative;overflow:hidden;
+}
+
+.dstat::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:3px;
+}
+
+.dstat.v1::after{background:linear-gradient(90deg,#F87171,#DC2626);}
+.dstat.v2::after{background:linear-gradient(90deg,#FCD34D,#D97706);}
+.dstat.v3::after{background:linear-gradient(90deg,#A78BFA,#7C3AED);}
+.dstat.v4::after{background:linear-gradient(90deg,#34D399,#059669);}
+
+.dstat-num{
+  font-size:2rem;font-weight:800;line-height:1;
+  margin-bottom:4px;
+}
+
+.dstat.v1 .dstat-num{color:#F87171;}
+.dstat.v2 .dstat-num{color:#FCD34D;}
+.dstat.v3 .dstat-num{color:#A78BFA;}
+.dstat.v4 .dstat-num{color:#34D399;}
+
+.dstat-label{font-size:0.8rem;color:var(--muted);font-weight:600;line-height:1.4;}
+
+/* DATA TABLE */
+.data-table-wrap{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--rlg);
+  overflow:hidden;
+  margin-top:1.5rem;
+}
+
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{
+  background:rgba(124,58,237,0.12);
+  padding:14px 16px;
+  font-size:0.8rem;font-weight:700;
+  color:var(--text3);letter-spacing:0.5px;
+  text-transform:uppercase;text-align:left;
+  border-bottom:1px solid var(--border);
+}
+
+.data-table td{
+  padding:13px 16px;
+  font-size:0.85rem;color:var(--text2);
+  border-bottom:1px solid var(--border2);
+}
+
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:rgba(124,58,237,0.05);}
+
+.severity-badge{
+  display:inline-block;padding:3px 10px;
+  border-radius:100px;font-size:0.72rem;font-weight:700;
+}
+
+.severity-high{background:rgba(220,38,38,0.15);color:#F87171;}
+.severity-med{background:rgba(217,119,6,0.12);color:#FCD34D;}
+.severity-low{background:rgba(5,150,105,0.12);color:#34D399;}
+
+/* TIPS ACCORDION */
+.acc-item{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  margin-bottom:8px;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.acc-item:hover{border-color:var(--border);}
+
+.acc-head{
+  padding:1.1rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;font-weight:600;font-size:0.9rem;
+  color:var(--text2);transition:all 0.2s;
+}
+.acc-head:hover{color:var(--text);}
+.acc-head.open{color:var(--text3);}
+
+.acc-arrow{
+  font-size:0.8rem;color:var(--muted);
+  transition:transform 0.25s;flex-shrink:0;
+}
+.acc-head.open .acc-arrow{transform:rotate(180deg);color:var(--p);}
+
+.acc-body{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.35s ease,padding 0.3s;
+  font-size:0.85rem;color:var(--muted);line-height:1.8;
+}
+.acc-body.open{max-height:600px;padding:0 1.5rem 1.25rem;}
+
+/* EMERGENCY */
+.emer-bar{
+  background:rgba(220,38,38,0.08);
+  border:1px solid rgba(220,38,38,0.3);
+  border-radius:var(--r);
+  padding:1.25rem 1.5rem;
+  display:flex;align-items:center;gap:1rem;
+  margin:2rem auto;max-width:760px;
+}
+.emer-icon{font-size:2rem;flex-shrink:0;}
+.emer-bar h4{font-weight:700;color:#F87171;font-size:0.9rem;margin-bottom:0.25rem;}
+.emer-bar p{font-size:0.82rem;color:#FCA5A5;line-height:1.6;}
+
+/* FOOTER */
+footer{
+  background:var(--bg2);
+  border-top:1px solid var(--border2);
+  padding:4rem 2rem 2rem;
+  text-align:center;
+}
+
+.foot-logo{
+  font-size:1.5rem;font-weight:800;
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:1rem;
+}
+
+footer p{font-size:0.82rem;color:var(--muted);max-width:500px;margin:0 auto;line-height:1.7;}
+
+/* ANIMATIONS */
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+.float{animation:float 3s ease-in-out infinite;}
+
+@keyframes pulse-ring{
+  0%{box-shadow:0 0 0 0 rgba(124,58,237,0.4);}
+  70%{box-shadow:0 0 0 12px rgba(124,58,237,0);}
+  100%{box-shadow:0 0 0 0 rgba(124,58,237,0);}
+}
+
+/* GAME START ANIMATION */
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+[id]{scroll-margin-top:80px;}
+
+/* Glow decorations */
+.glow-orb{
+  position:absolute;border-radius:50%;
+  filter:blur(80px);pointer-events:none;z-index:0;
+}
 </style>
 </head>
 <body>
 
+<!-- ── NAVIGATION ── -->
 <nav>
   <a class="nav-brand" href="#top">
-    <div class="logo-icon">🛡️</div>
-    SafeTouch
+    <div class="nav-logo">🛡️</div>
+    <span data-en="SafeTouch India" data-hi="सेफटच इंडिया">SafeTouch India</span>
   </a>
   <ul class="nav-links">
-    <li><a onclick="switchTab('learn')">Learn</a></li>
-    <li><a onclick="switchTab('body-map')">Body Map</a></li>
-    <li><a onclick="switchTab('quiz')">Quiz</a></li>
-    <li><a onclick="switchTab('game')">Game</a></li>
-    <li><a onclick="switchTab('tips')">Tips</a></li>
+    <li><a onclick="switchTab('learn')" data-en="📚 Learn" data-hi="📚 सीखें">📚 Learn</a></li>
+    <li><a onclick="switchTab('body-map')" data-en="🧍 Body Map" data-hi="🧍 बॉडी मैप">🧍 Body Map</a></li>
+    <li><a onclick="switchTab('quiz')" data-en="📝 Quiz" data-hi="📝 क्विज़">📝 Quiz</a></li>
+    <li><a onclick="switchTab('game')" data-en="🎮 Game" data-hi="🎮 खेल">🎮 Game</a></li>
+    <li><a onclick="switchTab('data')" data-en="📊 Data" data-hi="📊 डेटा">📊 Data</a></li>
+    <li><a onclick="switchTab('tips')" data-en="💡 Tips" data-hi="💡 सुझाव">💡 Tips</a></li>
   </ul>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')" id="btn-en">🇮🇳 EN</button>
+    <button class="lang-btn" onclick="setLang('hi')" id="btn-hi">🇮🇳 हिं</button>
+  </div>
 </nav>
 
+<!-- ── HERO ── -->
 <div class="hero" id="top">
-  <div class="hero-badge">🌟 Educational Resource for Children & Adults</div>
-  <h1>Understanding Good Touch<br>& Bad Touch</h1>
-  <p>Learn to recognize safe and unsafe touches. Build awareness, set boundaries, and know when to ask for help — in a fun, interactive way.</p>
-  <div class="hero-buttons">
-    <button class="btn btn-white" onclick="switchTab('learn')">🎓 Start Learning</button>
-    <button class="btn btn-outline-white" onclick="switchTab('game')">🎮 Play the Game</button>
-  </div>
-
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Learning Modules</div></div>
-    <div class="stat-card"><div class="stat-num">15+</div><div class="stat-label">Quiz Questions</div></div>
-    <div class="stat-card"><div class="stat-num">20+</div><div class="stat-label">Game Scenarios</div></div>
-    <div class="stat-card"><div class="stat-num">100%</div><div class="stat-label">Safe & Educational</div></div>
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>🌟</span>
+      <span data-en="Educational Resource for Children & Adults · India" data-hi="बच्चों और बड़ों के लिए शैक्षणिक संसाधन · भारत">Educational Resource for Children &amp; Adults · India</span>
+    </div>
+    <h1>
+      <span data-en="Understanding" data-hi="समझें">Understanding</span><br>
+      <span class="grad" data-en="Good Touch & Bad Touch" data-hi="अच्छा स्पर्श और बुरा स्पर्श">Good Touch &amp; Bad Touch</span>
+    </h1>
+    <p data-en="Learn to recognize safe and unsafe touches. Build awareness, set boundaries, and know when to ask for help — in a fun, interactive way designed for every child in India."
+       data-hi="सुरक्षित और असुरक्षित स्पर्श को पहचानना सीखें। जागरूकता बढ़ाएं, सीमाएं तय करें, और जानें कि कब मदद मांगनी है — एक मज़ेदार, इंटरैक्टिव तरीके से।">
+      Learn to recognize safe and unsafe touches. Build awareness, set boundaries, and know when to ask for help — in a fun, interactive way designed for every child in India.
+    </p>
+    <div class="hero-ctas">
+      <button class="btn-primary float" onclick="switchTab('learn')"
+        data-en="🎓 Start Learning" data-hi="🎓 सीखना शुरू करें">🎓 Start Learning</button>
+      <button class="btn-ghost" onclick="switchTab('game')"
+        data-en="🎮 Play Game" data-hi="🎮 खेल खेलें">🎮 Play Game</button>
+      <button class="btn-ghost" onclick="switchTab('data')"
+        data-en="📊 View Data" data-hi="📊 डेटा देखें">📊 View Data</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num" data-en="15+" data-hi="15+">15+</div>
+        <div class="hstat-label" data-en="Quiz Questions" data-hi="क्विज़ प्रश्न">Quiz Questions</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num" data-en="20+" data-hi="20+">20+</div>
+        <div class="hstat-label" data-en="Game Scenarios" data-hi="खेल परिदृश्य">Game Scenarios</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num" data-en="8" data-hi="8">8</div>
+        <div class="hstat-label" data-en="Data Charts" data-hi="डेटा चार्ट">Data Charts</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num" data-en="2" data-hi="2">2</div>
+        <div class="hstat-label" data-en="Languages" data-hi="भाषाएं">Languages</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<section id="main-section" style="padding-top: 3rem;">
+<!-- ── MAIN SECTION ── -->
+<section class="section" id="main-section">
 
+  <!-- TABS -->
   <div class="main-tabs">
-    <button class="main-tab active" onclick="switchTab('learn')">📚 Learn</button>
-    <button class="main-tab" onclick="switchTab('body-map')">🧍 Body Map</button>
-    <button class="main-tab" onclick="switchTab('quiz')">📝 Quiz</button>
-    <button class="main-tab" onclick="switchTab('game')">🎮 Game</button>
-    <button class="main-tab" onclick="switchTab('tips')">💡 Safety Tips</button>
+    <button class="mtab active" onclick="switchTab('learn')" data-en="📚 Learn" data-hi="📚 सीखें">📚 Learn</button>
+    <button class="mtab" onclick="switchTab('body-map')" data-en="🧍 Body Map" data-hi="🧍 बॉडी मैप">🧍 Body Map</button>
+    <button class="mtab" onclick="switchTab('quiz')" data-en="📝 Quiz" data-hi="📝 क्विज़">📝 Quiz</button>
+    <button class="mtab" onclick="switchTab('game')" data-en="🎮 Game" data-hi="🎮 खेल">🎮 Game</button>
+    <button class="mtab" onclick="switchTab('data')" data-en="📊 Data" data-hi="📊 डेटा">📊 Data</button>
+    <button class="mtab" onclick="switchTab('tips')" data-en="💡 Tips" data-hi="💡 सुझाव">💡 Tips</button>
   </div>
 
-  <!-- LEARN TAB -->
+  <!-- ════ LEARN TAB ════ -->
   <div id="tab-learn" class="tab-content active">
-
-    <div class="section-header">
-      <div class="section-tag">📚 Learn</div>
-      <h2>What Are Good Touch & Bad Touch?</h2>
-      <p>Understanding the difference between safe and unsafe touches is a key life skill that protects children and builds confidence.</p>
+    <div class="section-header center">
+      <div class="stag" data-en="📚 Education" data-hi="📚 शिक्षा">📚 Education</div>
+      <h2 class="shead" data-en="What Are <span class='acc'>Good Touch</span> & <span class='acc'>Bad Touch</span>?"
+          data-hi="<span class='acc'>अच्छा स्पर्श</span> और <span class='acc'>बुरा स्पर्श</span> क्या है?">
+        What Are <span class="acc">Good Touch</span> &amp; <span class="acc">Bad Touch</span>?
+      </h2>
+      <p class="sdesc" data-en="Understanding the difference between safe and unsafe touches is a key life skill that protects children and builds confidence."
+         data-hi="सुरक्षित और असुरक्षित स्पर्श के बीच का अंतर समझना एक महत्वपूर्ण जीवन कौशल है।">
+        Understanding the difference between safe and unsafe touches is a key life skill that protects children and builds confidence.
+      </p>
     </div>
 
-    <div class="content-grid">
-      <div class="info-card safe">
-        <div class="card-icon safe">✅</div>
-        <h3>Good Touch</h3>
-        <p style="color:var(--muted); font-size:0.9rem; line-height:1.7; margin-bottom:0.75rem;">Good touches are safe, caring, and make you feel comfortable and loved. They respect your body and personal space.</p>
-        <ul class="info-list">
-          <li>A warm hug from a parent or family member with your permission</li>
-          <li>Holding hands with a friend during play</li>
-          <li>A doctor examining you with a parent or guardian present</li>
-          <li>A gentle pat on the back for encouragement</li>
-          <li>A high-five or fist bump to celebrate something</li>
-          <li>A hair wash or bath given by a trusted caregiver</li>
+    <div class="grid-2" style="margin-bottom:2rem;">
+      <div class="glass-card icard-good">
+        <div class="icard-icon safe-bg">✅</div>
+        <h3 class="icard" data-en="Good Touch" data-hi="अच्छा स्पर्श">Good Touch</h3>
+        <p style="font-size:0.85rem;color:var(--text2);line-height:1.7;margin-bottom:0.75rem;"
+           data-en="Good touches are safe, caring, and make you feel comfortable and loved. They respect your body and personal space."
+           data-hi="अच्छे स्पर्श सुरक्षित, देखभाल भरे होते हैं और आपको आरामदायक और प्रेमपूर्ण महसूस कराते हैं।">
+          Good touches are safe, caring, and make you feel comfortable and loved. They respect your body and personal space.
+        </p>
+        <ul class="ilist good">
+          <li><span class="dot"></span><span data-en="A warm hug from a parent or family member with your permission" data-hi="माता-पिता या परिवार के किसी सदस्य से आपकी अनुमति के साथ गर्म गले लगाना">A warm hug from a parent or family member with your permission</span></li>
+          <li><span class="dot"></span><span data-en="Holding hands with a friend during play" data-hi="खेल के दौरान दोस्त के साथ हाथ पकड़ना">Holding hands with a friend during play</span></li>
+          <li><span class="dot"></span><span data-en="A doctor examining you with a parent or guardian present" data-hi="माता-पिता या अभिभावक की उपस्थिति में डॉक्टर द्वारा जांच">A doctor examining you with a parent or guardian present</span></li>
+          <li><span class="dot"></span><span data-en="A gentle pat on the back for encouragement" data-hi="प्रोत्साहन के लिए पीठ पर हल्की थपथपाहट">A gentle pat on the back for encouragement</span></li>
+          <li><span class="dot"></span><span data-en="A high-five or fist bump to celebrate something" data-hi="कुछ मनाने के लिए हाई-फाइव या फिस्ट बंप">A high-five or fist bump to celebrate something</span></li>
         </ul>
-        <div class="tag-list">
-          <span class="tag safe">✓ Feels Good</span>
-          <span class="tag safe">✓ Asked Permission</span>
-          <span class="tag safe">✓ Done in Public</span>
-          <span class="tag safe">✓ Makes You Happy</span>
+        <div class="tag-row">
+          <span class="pill safe" data-en="✓ Feels Good" data-hi="✓ अच्छा लगता है">✓ Feels Good</span>
+          <span class="pill safe" data-en="✓ With Permission" data-hi="✓ अनुमति के साथ">✓ With Permission</span>
+          <span class="pill safe" data-en="✓ Makes Happy" data-hi="✓ खुश करता है">✓ Makes Happy</span>
         </div>
       </div>
 
-      <div class="info-card unsafe">
-        <div class="card-icon unsafe">🚫</div>
-        <h3>Bad Touch</h3>
-        <p style="color:var(--muted); font-size:0.9rem; line-height:1.7; margin-bottom:0.75rem;">Bad touches make you feel scared, hurt, confused, or uncomfortable. No one should touch you in a way that feels wrong — even someone you know.</p>
-        <ul class="info-list bad">
-          <li>Any touch that makes you feel scared or uncomfortable</li>
-          <li>Touching private body parts (covered by a swimsuit)</li>
-          <li>Touching done in secret or with promises of gifts</li>
-          <li>Being hit, punched, or physically hurt by someone</li>
-          <li>Touching that comes with threats like "don't tell anyone"</li>
-          <li>Any touch that feels wrong even if you can't explain why</li>
+      <div class="glass-card icard-bad">
+        <div class="icard-icon bad-bg">🚫</div>
+        <h3 data-en="Bad Touch" data-hi="बुरा स्पर्श">Bad Touch</h3>
+        <p style="font-size:0.85rem;color:var(--text2);line-height:1.7;margin-bottom:0.75rem;"
+           data-en="Bad touches make you feel scared, hurt, confused, or uncomfortable. No one should touch you in a way that feels wrong."
+           data-hi="बुरे स्पर्श आपको डरा हुआ, चोटिल, भ्रमित या असहज महसूस कराते हैं।">
+          Bad touches make you feel scared, hurt, confused, or uncomfortable. No one should touch you in a way that feels wrong.
+        </p>
+        <ul class="ilist bad">
+          <li><span class="dot"></span><span data-en="Any touch that makes you feel scared or uncomfortable" data-hi="कोई भी स्पर्श जो आपको डरा हुआ या असहज महसूस कराए">Any touch that makes you feel scared or uncomfortable</span></li>
+          <li><span class="dot"></span><span data-en="Touching private body parts (covered by a swimsuit)" data-hi="निजी शरीर के अंगों को छूना (स्विमसूट से ढके भाग)">Touching private body parts (covered by a swimsuit)</span></li>
+          <li><span class="dot"></span><span data-en="Touching done in secret or with promises of gifts" data-hi="गुप्त रूप से या उपहार के वादे के साथ स्पर्श करना">Touching done in secret or with promises of gifts</span></li>
+          <li><span class="dot"></span><span data-en="Being hit, punched, or physically hurt by someone" data-hi="किसी के द्वारा मारना या शारीरिक नुकसान पहुंचाना">Being hit, punched, or physically hurt by someone</span></li>
+          <li><span class="dot"></span><span data-en="Any touch with threats like 'don't tell anyone'" data-hi="'किसी को मत बताना' जैसी धमकियों के साथ स्पर्श">Any touch with threats like 'don't tell anyone'</span></li>
         </ul>
-        <div class="tag-list">
-          <span class="tag unsafe">✗ Feels Wrong</span>
-          <span class="tag unsafe">✗ Done in Secret</span>
-          <span class="tag unsafe">✗ No Permission</span>
-          <span class="tag unsafe">✗ Makes You Scared</span>
+        <div class="tag-row">
+          <span class="pill bad" data-en="✗ Feels Wrong" data-hi="✗ गलत लगता है">✗ Feels Wrong</span>
+          <span class="pill bad" data-en="✗ Done in Secret" data-hi="✗ गुप्त रूप से">✗ Done in Secret</span>
+          <span class="pill bad" data-en="✗ Makes Scared" data-hi="✗ डर लगता है">✗ Makes Scared</span>
         </div>
       </div>
     </div>
 
-    <div class="highlight-box">
-      🔑 <strong>The Golden Rule:</strong> Your body belongs to YOU. No one — not even a relative, teacher, or friend — has the right to touch you in a way that makes you feel uncomfortable. Your feelings are always valid. If something feels wrong, it probably is.
+    <div class="highlight">
+      🔑 <strong data-en="The Golden Rule:" data-hi="सुनहरा नियम:">The Golden Rule:</strong>
+      <span data-en=" Your body belongs to YOU. No one — not even a relative, teacher, or friend — has the right to touch you in a way that makes you feel uncomfortable. Your feelings are always valid."
+            data-hi=" आपका शरीर आपका है। कोई भी — यहां तक कि कोई रिश्तेदार, शिक्षक, या दोस्त — आपको ऐसे तरीके से नहीं छू सकता जिससे आप असहज महसूस करें। आपकी भावनाएं हमेशा मान्य हैं।">
+       Your body belongs to YOU. No one — not even a relative, teacher, or friend — has the right to touch you in a way that makes you feel uncomfortable. Your feelings are always valid.
+      </span>
     </div>
 
-    <div class="section-header" style="margin-top:3rem; margin-bottom:1.5rem;">
-      <div class="section-tag">🩲 Privacy</div>
-      <h2>Private Body Parts</h2>
-      <p>Private parts are the areas covered by a swimsuit. No one should touch these areas except for medical reasons with a parent or guardian present.</p>
+    <div class="section-header center" style="margin-top:3.5rem;">
+      <div class="stag" data-en="⚖️ Rights" data-hi="⚖️ अधिकार">⚖️ Rights</div>
+      <h2 class="shead" data-en="Your Body, <span class='acc'>Your Rights</span>" data-hi="आपका शरीर, <span class='acc'>आपके अधिकार</span>">Your Body, <span class="acc">Your Rights</span></h2>
     </div>
 
-    <div class="info-card" style="max-width:680px; margin:0 auto;">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
-        <div>
-          <h4 style="font-weight:700; margin-bottom:0.75rem; color:var(--text);">🙋 Why We Call Them Private</h4>
-          <p style="font-size:0.875rem; color:var(--muted); line-height:1.7;">Private parts are areas of your body that are special and belong only to you. They include the chest, bottom, and genitals — the areas covered by a swimsuit. Even on the beach or at a doctor's office, these areas deserve respect and privacy.</p>
-        </div>
-        <div>
-          <h4 style="font-weight:700; margin-bottom:0.75rem; color:var(--text);">👨‍⚕️ When It's Okay for a Doctor</h4>
-          <p style="font-size:0.875rem; color:var(--muted); line-height:1.7;">A doctor or nurse may need to check private areas during a health exam — but only with your parent or guardian in the room, with your understanding of why, and with your permission whenever possible. You can always ask questions.</p>
-        </div>
-      </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:3rem;">
+      <div class="rule-card"><div class="rnum">1</div><h4 data-en="Right to Say No" data-hi="'नहीं' कहने का अधिकार">Right to Say No</h4><p data-en="You can say No to any touch that makes you uncomfortable — even from people you love." data-hi="आप किसी भी स्पर्श के लिए 'नहीं' कह सकते हैं जो आपको असहज करे।">You can say No to any touch that makes you uncomfortable — even from people you love.</p></div>
+      <div class="rule-card"><div class="rnum">2</div><h4 data-en="Right to Tell" data-hi="बताने का अधिकार">Right to Tell</h4><p data-en="If someone touches you wrongly, it is NEVER your fault. Tell a trusted adult right away." data-hi="अगर कोई आपको गलत तरीके से छुए, तो यह कभी आपकी गलती नहीं है।">If someone touches you wrongly, it is NEVER your fault. Tell a trusted adult right away.</p></div>
+      <div class="rule-card"><div class="rnum">3</div><h4 data-en="Right to Privacy" data-hi="गोपनीयता का अधिकार">Right to Privacy</h4><p data-en="Your body is private. No one should see or touch your private parts without a medical reason." data-hi="आपका शरीर निजी है। कोई भी चिकित्सीय कारण के बिना आपके निजी अंगों को नहीं देख सकता।">Your body is private. No one should see or touch your private parts without a medical reason.</p></div>
+      <div class="rule-card"><div class="rnum">4</div><h4 data-en="Feelings Matter" data-hi="भावनाएं मायने रखती हैं">Feelings Matter</h4><p data-en="If something feels wrong — even if you can't explain it — trust your instincts." data-hi="अगर कुछ गलत लगे — भले ही आप समझा न पाएं — अपनी अंतरात्मा पर भरोसा करें।">If something feels wrong — even if you can't explain it — trust your instincts.</p></div>
+      <div class="rule-card"><div class="rnum">5</div><h4 data-en="No Body Secrets" data-hi="शरीर के कोई रहस्य नहीं">No Body Secrets</h4><p data-en="Safe adults do NOT ask you to keep secrets about touches. Any body secret is a warning sign." data-hi="सुरक्षित वयस्क आपसे स्पर्श के बारे में रहस्य रखने के लिए नहीं कहते।">Safe adults do NOT ask you to keep secrets about touches. Any body secret is a warning sign.</p></div>
+      <div class="rule-card"><div class="rnum">6</div><h4 data-en="Never Your Fault" data-hi="कभी आपकी गलती नहीं">Never Your Fault</h4><p data-en="If someone touches you inappropriately, it is NEVER your fault, no matter what anyone says." data-hi="अगर कोई आपको अनुचित तरीके से छुए, तो यह कभी आपकी गलती नहीं है।">If someone touches you inappropriately, it is NEVER your fault, no matter what anyone says.</p></div>
     </div>
 
-    <div class="section-header" style="margin-top:3rem; margin-bottom:1.5rem;">
-      <div class="section-tag">⚖️ Your Rights</div>
-      <h2>Your Body, Your Rights</h2>
-      <p>Every person has the right to feel safe in their body. These are the fundamental rights you have.</p>
-    </div>
-
-    <div class="rules-grid">
-      <div class="rule-card">
-        <div class="rule-num">1</div>
-        <h4>The Right to Say No</h4>
-        <p>You can say "No" to any touch that makes you feel uncomfortable — even from people you know and love.</p>
+    <div class="grid-2" style="max-width:860px;margin:0 auto;">
+      <div class="glass-card" style="border-left:3px solid var(--p);">
+        <h3 style="margin-bottom:0.75rem;" data-en="🗣️ Talk to Someone You Trust" data-hi="🗣️ किसी विश्वसनीय व्यक्ति से बात करें">🗣️ Talk to Someone You Trust</h3>
+        <p style="font-size:0.85rem;color:var(--text2);line-height:1.7;"
+           data-en="Tell a parent, teacher, school counselor, or police officer. If the first person doesn't help, tell someone else. Keep telling until someone listens."
+           data-hi="किसी माता-पिता, शिक्षक, स्कूल काउंसलर या पुलिस अधिकारी को बताएं। अगर पहला व्यक्ति मदद नहीं करता, तो दूसरे को बताएं।">
+          Tell a parent, teacher, school counselor, or police officer. If the first person doesn't help, tell someone else. Keep telling until someone listens.
+        </p>
       </div>
-      <div class="rule-card">
-        <div class="rule-num">2</div>
-        <h4>The Right to Tell</h4>
-        <p>If someone touches you in a wrong way, it is NEVER your fault. Tell a trusted adult right away and keep telling until someone helps.</p>
-      </div>
-      <div class="rule-card">
-        <div class="rule-num">3</div>
-        <h4>The Right to Privacy</h4>
-        <p>Your body is private. No one should look at or touch your private parts without a medical reason and a parent present.</p>
-      </div>
-      <div class="rule-card">
-        <div class="rule-num">4</div>
-        <h4>Your Feelings Matter</h4>
-        <p>If something feels wrong — even if you can't explain it — trust your instincts. Your feelings are real and important.</p>
-      </div>
-      <div class="rule-card">
-        <div class="rule-num">5</div>
-        <h4>No Secrets About Bodies</h4>
-        <p>Safe adults do NOT ask you to keep secrets about touches. Any "secret" about your body is a warning sign.</p>
-      </div>
-      <div class="rule-card">
-        <div class="rule-num">6</div>
-        <h4>Never Your Fault</h4>
-        <p>If someone touches you inappropriately, it is NEVER your fault. You are not to blame, no matter what anyone says.</p>
+      <div class="glass-card" style="border-left:3px solid var(--warn);">
+        <h3 style="margin-bottom:0.75rem;" data-en="📞 Know Emergency Numbers" data-hi="📞 आपातकालीन नंबर जानें">📞 Know Emergency Numbers</h3>
+        <p style="font-size:0.85rem;color:var(--text2);line-height:1.7;"
+           data-en="Child helplines are free, confidential, and available 24/7. Always remember: Childline 1098, Police 100, Women Helpline 1091."
+           data-hi="बाल सहायता लाइन मुफ्त, गोपनीय और 24/7 उपलब्ध है। हमेशा याद रखें: चाइल्डलाइन 1098, पुलिस 100, महिला हेल्पलाइन 1091।">
+          Child helplines are free, confidential, and available 24/7. Always remember: Childline 1098, Police 100, Women Helpline 1091.
+        </p>
       </div>
     </div>
 
-    <div class="section-header" style="margin-top:3rem; margin-bottom:1.5rem;">
-      <div class="section-tag">🚨 What To Do</div>
-      <h2>If Something Feels Wrong</h2>
-    </div>
-    <div class="content-grid" style="max-width:900px; margin:0 auto;">
-      <div class="info-card" style="border-left:4px solid var(--primary);">
-        <h3>🗣️ Talk to Someone You Trust</h3>
-        <p style="font-size:0.875rem; color:var(--muted); line-height:1.7;">Tell a parent, teacher, school counselor, police officer, or another trusted adult. If the first person you tell doesn't help, tell someone else. Keep telling until someone listens and helps you.</p>
-      </div>
-      <div class="info-card" style="border-left:4px solid var(--caution);">
-        <h3>📞 Know Emergency Numbers</h3>
-        <p style="font-size:0.875rem; color:var(--muted); line-height:1.7;">Remember: You can always call emergency services (like 100 in India or 911 in the US). Child helplines are also available — they are free, confidential, and staffed by people who want to help you stay safe.</p>
-      </div>
-    </div>
-
-    <div class="emergency-banner">
-      <div class="emergency-icon">🆘</div>
+    <div class="emer-bar">
+      <div class="emer-icon">🆘</div>
       <div>
-        <h4>If you are in danger, call for help immediately</h4>
-        <p>India: Child Helpline — <strong>1098</strong> (free, 24/7) &nbsp;|&nbsp; Police — <strong>100</strong> &nbsp;|&nbsp; Women's Helpline — <strong>1091</strong>. Tell a trusted adult if you or someone else is unsafe.</p>
+        <h4 data-en="If you are in danger, call for help immediately" data-hi="अगर आप खतरे में हैं, तुरंत मदद के लिए कॉल करें">If you are in danger, call for help immediately</h4>
+        <p data-en="India: Childline — 1098 (free, 24/7) | Police — 100 | Women's Helpline — 1091 | iCall — 9152987821"
+           data-hi="भारत: चाइल्डलाइन — 1098 (मुफ्त, 24/7) | पुलिस — 100 | महिला हेल्पलाइन — 1091 | iCall — 9152987821">
+          India: Childline — 1098 (free, 24/7) | Police — 100 | Women's Helpline — 1091 | iCall — 9152987821
+        </p>
       </div>
     </div>
-
   </div>
 
-  <!-- BODY MAP TAB -->
+  <!-- ════ BODY MAP TAB ════ -->
   <div id="tab-body-map" class="tab-content">
-    <div class="section-header">
-      <div class="section-tag">🧍 Interactive</div>
-      <h2>Explore the Body Map</h2>
-      <p>Click or tap on different parts of the body to learn which touches are safe, which are unsafe, and why each area matters for your safety.</p>
+    <div class="section-header center">
+      <div class="stag" data-en="🧍 Interactive" data-hi="🧍 इंटरैक्टिव">🧍 Interactive</div>
+      <h2 class="shead" data-en="Explore the <span class='acc'>Body Map</span>" data-hi="<span class='acc'>बॉडी मैप</span> एक्सप्लोर करें">Explore the <span class="acc">Body Map</span></h2>
+      <p class="sdesc" data-en="Click or tap on different parts of the body to learn which touches are safe, which are private, and why each area matters for your safety."
+         data-hi="शरीर के विभिन्न भागों पर क्लिक करें ताकि पता चले कि कौन से स्पर्श सुरक्षित हैं और कौन से निजी हैं।">
+        Click or tap on different parts of the body to learn which touches are safe, which are private, and why each area matters for your safety.
+      </p>
     </div>
-
-    <div id="body-map-section">
-      <div class="body-map-layout">
-        <div class="body-map-container">
-          <svg viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg" id="body-svg">
+    <div class="bodymap-wrap">
+      <div class="bodymap-layout">
+        <div class="body-svg-cont">
+          <svg viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg">
             <!-- HEAD -->
-            <g class="body-zone" onclick="showZone('head')" id="zone-head">
-              <ellipse cx="100" cy="45" rx="32" ry="38" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
-              <circle cx="90" cy="40" r="4" fill="#F59E0B" opacity="0.7"/>
-              <circle cx="110" cy="40" r="4" fill="#F59E0B" opacity="0.7"/>
-              <path d="M 90 55 Q 100 63 110 55" stroke="#F59E0B" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <text x="100" y="95" text-anchor="middle" font-size="9" fill="#92400E" font-weight="bold" font-family="Nunito">HEAD</text>
+            <g class="body-zone" onclick="showZone('head')">
+              <ellipse cx="100" cy="45" rx="33" ry="39" fill="#FEF3C7" stroke="#D97706" stroke-width="2.5" opacity="0.9"/>
+              <circle cx="89" cy="39" r="4.5" fill="#D97706" opacity="0.6"/>
+              <circle cx="111" cy="39" r="4.5" fill="#D97706" opacity="0.6"/>
+              <path d="M88 56 Q100 65 112 56" stroke="#D97706" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <text x="100" y="95" text-anchor="middle" font-size="8.5" fill="#92400E" font-weight="bold" font-family="Inter">HEAD</text>
             </g>
-
             <!-- NECK -->
-            <g class="body-zone" onclick="showZone('neck')" id="zone-neck">
-              <rect x="86" y="83" width="28" height="22" rx="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+            <g class="body-zone" onclick="showZone('neck')">
+              <rect x="85" y="84" width="30" height="23" rx="5" fill="#FEF3C7" stroke="#D97706" stroke-width="1.8"/>
             </g>
-
             <!-- LEFT ARM -->
-            <g class="body-zone" onclick="showZone('arms')" id="zone-arm-l">
-              <rect x="34" y="107" width="26" height="80" rx="13" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
-              <rect x="28" y="188" width="22" height="40" rx="11" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
-              <ellipse cx="39" cy="238" rx="14" ry="10" fill="#FEF3C7" stroke="#22C55E" stroke-width="1.5"/>
+            <g class="body-zone" onclick="showZone('arms')">
+              <rect x="32" y="107" width="28" height="82" rx="14" fill="#DCFCE7" stroke="#059669" stroke-width="2"/>
+              <rect x="26" y="190" width="24" height="42" rx="12" fill="#DCFCE7" stroke="#059669" stroke-width="1.8"/>
+              <ellipse cx="38" cy="240" rx="16" ry="10" fill="#FEF3C7" stroke="#059669" stroke-width="1.8"/>
             </g>
-
             <!-- RIGHT ARM -->
-            <g class="body-zone" onclick="showZone('arms')" id="zone-arm-r">
-              <rect x="140" y="107" width="26" height="80" rx="13" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
-              <rect x="150" y="188" width="22" height="40" rx="11" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
-              <ellipse cx="161" cy="238" rx="14" ry="10" fill="#FEF3C7" stroke="#22C55E" stroke-width="1.5"/>
+            <g class="body-zone" onclick="showZone('arms')">
+              <rect x="140" y="107" width="28" height="82" rx="14" fill="#DCFCE7" stroke="#059669" stroke-width="2"/>
+              <rect x="150" y="190" width="24" height="42" rx="12" fill="#DCFCE7" stroke="#059669" stroke-width="1.8"/>
+              <ellipse cx="162" cy="240" rx="16" ry="10" fill="#FEF3C7" stroke="#059669" stroke-width="1.8"/>
             </g>
-
             <!-- CHEST -->
-            <g class="body-zone" onclick="showZone('chest')" id="zone-chest">
-              <path d="M 64 105 L 60 175 L 140 175 L 136 105 Q 100 95 64 105 Z" fill="#FEE2E2" stroke="#EF4444" stroke-width="2"/>
-              <text x="100" y="145" text-anchor="middle" font-size="8" fill="#B91C1C" font-weight="bold" font-family="Nunito">CHEST</text>
-              <text x="100" y="155" text-anchor="middle" font-size="7" fill="#B91C1C" font-family="Nunito">(PRIVATE)</text>
+            <g class="body-zone" onclick="showZone('chest')">
+              <path d="M62 106 L58 176 L142 176 L138 106 Q100 94 62 106 Z" fill="#FEE2E2" stroke="#DC2626" stroke-width="2.5"/>
+              <text x="100" y="146" text-anchor="middle" font-size="8" fill="#991B1B" font-weight="bold" font-family="Inter">CHEST</text>
+              <text x="100" y="157" text-anchor="middle" font-size="7" fill="#991B1B" font-family="Inter">(PRIVATE)</text>
             </g>
-
             <!-- BELLY -->
-            <g class="body-zone" onclick="showZone('belly')" id="zone-belly">
-              <rect x="64" y="177" width="72" height="45" rx="5" fill="#EEF0FF" stroke="#6C63FF" stroke-width="1.5"/>
-              <text x="100" y="204" text-anchor="middle" font-size="8" fill="#3730A3" font-weight="bold" font-family="Nunito">BELLY</text>
+            <g class="body-zone" onclick="showZone('belly')">
+              <rect x="63" y="178" width="74" height="44" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="2"/>
+              <text x="100" y="205" text-anchor="middle" font-size="8" fill="#4C1D95" font-weight="bold" font-family="Inter">BELLY</text>
             </g>
-
-            <!-- PRIVATE ZONE -->
-            <g class="body-zone" onclick="showZone('private')" id="zone-private">
-              <rect x="70" y="224" width="60" height="35" rx="6" fill="#FEE2E2" stroke="#EF4444" stroke-width="2.5"/>
-              <text x="100" y="244" text-anchor="middle" font-size="8" fill="#B91C1C" font-weight="bold" font-family="Nunito">PRIVATE PARTS</text>
-              <text x="100" y="253" text-anchor="middle" font-size="7" fill="#B91C1C" font-family="Nunito">⚠ PROTECTED ⚠</text>
+            <!-- PRIVATE -->
+            <g class="body-zone" onclick="showZone('private')">
+              <rect x="68" y="224" width="64" height="37" rx="7" fill="#FEE2E2" stroke="#DC2626" stroke-width="3"/>
+              <text x="100" y="244" text-anchor="middle" font-size="7.5" fill="#991B1B" font-weight="bold" font-family="Inter">PRIVATE PARTS</text>
+              <text x="100" y="254" text-anchor="middle" font-size="7" fill="#991B1B" font-family="Inter">⚠ PROTECTED</text>
             </g>
-
             <!-- LEFT LEG -->
-            <g class="body-zone" onclick="showZone('legs')" id="zone-leg-l">
-              <rect x="68" y="261" width="30" height="90" rx="12" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
-              <ellipse cx="83" cy="320" rx="18" ry="11" fill="#D1FAE5" stroke="#22C55E" stroke-width="1"/>
-              <ellipse cx="83" cy="360" rx="20" ry="10" fill="#FEF3C7" stroke="#22C55E" stroke-width="1.5"/>
+            <g class="body-zone" onclick="showZone('legs')">
+              <rect x="66" y="263" width="32" height="92" rx="13" fill="#DCFCE7" stroke="#059669" stroke-width="2"/>
+              <ellipse cx="82" cy="323" rx="20" ry="12" fill="#D1FAE5" stroke="#059669" stroke-width="1.2"/>
+              <ellipse cx="82" cy="363" rx="22" ry="11" fill="#FEF3C7" stroke="#059669" stroke-width="1.8"/>
             </g>
-
             <!-- RIGHT LEG -->
-            <g class="body-zone" onclick="showZone('legs')" id="zone-leg-r">
-              <rect x="102" y="261" width="30" height="90" rx="12" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
-              <ellipse cx="117" cy="320" rx="18" ry="11" fill="#D1FAE5" stroke="#22C55E" stroke-width="1"/>
-              <ellipse cx="117" cy="360" rx="20" ry="10" fill="#FEF3C7" stroke="#22C55E" stroke-width="1.5"/>
+            <g class="body-zone" onclick="showZone('legs')">
+              <rect x="102" y="263" width="32" height="92" rx="13" fill="#DCFCE7" stroke="#059669" stroke-width="2"/>
+              <ellipse cx="118" cy="323" rx="20" ry="12" fill="#D1FAE5" stroke="#059669" stroke-width="1.2"/>
+              <ellipse cx="118" cy="363" rx="22" ry="11" fill="#FEF3C7" stroke="#059669" stroke-width="1.8"/>
             </g>
-
             <!-- MOUTH -->
-            <g class="body-zone" onclick="showZone('mouth')" id="zone-mouth">
-              <ellipse cx="100" cy="57" rx="12" ry="6" fill="#FDE68A" stroke="#D97706" stroke-width="1.5" opacity="0.7"/>
+            <g class="body-zone" onclick="showZone('mouth')">
+              <ellipse cx="100" cy="58" rx="13" ry="7" fill="#FDE68A" stroke="#D97706" stroke-width="1.8" opacity="0.75"/>
             </g>
           </svg>
-
           <div class="map-legend">
-            <div class="legend-dot"><div class="dot" style="background:var(--safe)"></div>Safe to touch</div>
-            <div class="legend-dot"><div class="dot" style="background:var(--unsafe)"></div>Private / Protected</div>
-            <div class="legend-dot"><div class="dot" style="background:var(--caution)"></div>Context matters</div>
+            <div class="ldot"><span style="background:#059669;"></span><span data-en="Safe" data-hi="सुरक्षित">Safe</span></div>
+            <div class="ldot"><span style="background:#DC2626;"></span><span data-en="Private" data-hi="निजी">Private</span></div>
+            <div class="ldot"><span style="background:#D97706;"></span><span data-en="Context Matters" data-hi="संदर्भ महत्वपूर्ण">Context Matters</span></div>
           </div>
         </div>
-
         <div>
-          <div class="zone-info-panel" id="zone-info-panel">
-            <p style="text-align:center; color:var(--muted); padding:2rem 0;">
-              👆 Click on any part of the body to learn about that area
+          <div class="zone-panel" id="zone-panel">
+            <p style="text-align:center;color:var(--muted);padding:2.5rem 0;font-size:0.9rem;"
+               data-en="👆 Click on any body part to learn about that area"
+               data-hi="👆 उस क्षेत्र के बारे में जानने के लिए शरीर के किसी भी भाग पर क्लिक करें">
+              👆 Click on any body part to learn about that area
             </p>
           </div>
-          <div style="margin-top:1.5rem; font-size:0.85rem; color:var(--muted); line-height:1.7;">
-            <strong style="color:var(--text);">Remember:</strong> Private parts are areas covered by a swimsuit. These areas should only be touched by a doctor during a check-up, with a parent or guardian present.
-          </div>
+          <p style="margin-top:1.25rem;font-size:0.8rem;color:var(--muted);line-height:1.7;"
+             data-en="<strong style='color:var(--text2)'>Remember:</strong> Private parts are areas covered by a swimsuit. These should only be touched by a doctor during a check-up, with a parent present."
+             data-hi="<strong style='color:var(--text2)'>याद रखें:</strong> निजी अंग वे क्षेत्र हैं जो स्विमसूट से ढके होते हैं। इन्हें केवल माता-पिता की उपस्थिति में डॉक्टर द्वारा ही छुआ जाना चाहिए।">
+            <strong style="color:var(--text2)">Remember:</strong> Private parts are areas covered by a swimsuit. These should only be touched by a doctor during a check-up, with a parent present.
+          </p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- QUIZ TAB -->
+  <!-- ════ QUIZ TAB ════ -->
   <div id="tab-quiz" class="tab-content">
-    <div class="section-header">
-      <div class="section-tag">📝 Quiz</div>
-      <h2>Test Your Knowledge</h2>
-      <p>Answer questions to see how much you've learned about keeping yourself safe. Take your time — each question helps reinforce what you know.</p>
+    <div class="section-header center">
+      <div class="stag" data-en="📝 Quiz" data-hi="📝 क्विज़">📝 Quiz</div>
+      <h2 class="shead" data-en="Test Your <span class='acc'>Knowledge</span>" data-hi="अपना <span class='acc'>ज्ञान</span> जांचें">Test Your <span class="acc">Knowledge</span></h2>
+      <p class="sdesc" data-en="Answer 15 questions to see how much you've learned. Each question builds awareness and reinforces safety knowledge."
+         data-hi="15 प्रश्नों के उत्तर दें और देखें कि आपने कितना सीखा है।">
+        Answer 15 questions to see how much you've learned. Each question builds awareness and reinforces safety knowledge.
+      </p>
     </div>
-
-    <div id="quiz-section">
+    <div class="quiz-shell">
       <div class="quiz-card">
         <div id="quiz-main">
-          <div class="quiz-progress-bar">
-            <div class="quiz-progress-fill" id="quiz-progress" style="width:0%"></div>
+          <div class="qprog-bar"><div class="qprog-fill" id="qprog" style="width:0%"></div></div>
+          <div class="qcounter" id="qcounter">Question 1 of 15</div>
+          <div class="qquestion" id="qquestion">Loading...</div>
+          <div class="qopts" id="qopts"></div>
+          <div class="qfeedback" id="qfeedback">
+            <span id="qfbicon">✅</span>
+            <span id="qfbtext"></span>
           </div>
-          <div class="quiz-counter" id="quiz-counter">Question 1 of 15</div>
-          <div class="quiz-question" id="quiz-question">Loading...</div>
-          <div class="quiz-options" id="quiz-options"></div>
-          <div class="quiz-feedback" id="quiz-feedback">
-            <span id="quiz-feedback-icon">✅</span>
-            <span id="quiz-feedback-text"></span>
-          </div>
-          <button class="quiz-next-btn" id="quiz-next">Next Question →</button>
+          <button class="qnext" id="qnext" data-en="Next Question →" data-hi="अगला प्रश्न →">Next Question →</button>
         </div>
-        <div class="quiz-result" id="quiz-result">
-          <div class="result-circle">
-            <div class="result-score" id="result-score">0</div>
-            <div class="result-total" id="result-total">/ 15</div>
+        <div class="qresult" id="qresult">
+          <div class="rcircle">
+            <div class="rscore" id="rscore">0</div>
+            <div class="rtotal" id="rtotal">/ 15</div>
           </div>
-          <h3 style="font-family:'Baloo 2',cursive; font-size:1.4rem; margin-bottom:0.5rem;" id="result-title">Great job!</h3>
-          <p style="color:var(--muted); font-size:0.9rem; max-width:400px; margin:0 auto 1.5rem;" id="result-msg">You're learning well!</p>
-          <button class="btn" style="background:var(--primary);color:white;" onclick="restartQuiz()">🔄 Try Again</button>
+          <h3 style="font-size:1.3rem;font-weight:800;margin-bottom:0.5rem;" id="rtitle">Great job!</h3>
+          <p style="color:var(--muted);font-size:0.88rem;max-width:380px;margin:0 auto 1.5rem;" id="rmsg"></p>
+          <button class="btn-primary" onclick="restartQuiz()" data-en="🔄 Try Again" data-hi="🔄 फिर कोशिश करें">🔄 Try Again</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- GAME TAB -->
+  <!-- ════ GAME TAB ════ -->
   <div id="tab-game" class="tab-content">
-    <div class="section-header">
-      <div class="section-tag">🎮 Game</div>
-      <h2>Good Touch or Bad Touch?</h2>
-      <p>Read each scenario and decide if it describes a good touch or a bad touch. Be quick! Practice makes you more aware and confident.</p>
+    <div class="section-header center">
+      <div class="stag" data-en="🎮 Game" data-hi="🎮 खेल">🎮 Game</div>
+      <h2 class="shead" data-en="Good Touch or <span class='acc'>Bad Touch?</span>" data-hi="अच्छा स्पर्श या <span class='acc'>बुरा स्पर्श?</span>">Good Touch or <span class="acc">Bad Touch?</span></h2>
+      <p class="sdesc" data-en="Read each scenario and decide. 30 seconds per question. The more you practice, the safer you become!"
+         data-hi="प्रत्येक परिदृश्य पढ़ें और निर्णय लें। प्रति प्रश्न 30 सेकंड।">
+        Read each scenario and decide. 30 seconds per question. The more you practice, the safer you become!
+      </p>
     </div>
-
-    <div id="game-section">
-      <div class="game-wrapper">
-        <div id="game-start-screen" class="game-start-screen">
-          <div class="start-big-icon pulse">🎮</div>
-          <h3 style="font-family:'Baloo 2',cursive; font-size:1.5rem; margin-bottom:0.75rem;">Ready to Play?</h3>
-          <p style="color:var(--muted); max-width:380px; margin:0 auto 2rem; font-size:0.95rem; line-height:1.7;">You'll see real-life scenarios. Decide if each is a <span style="color:var(--safe);font-weight:700;">Good Touch</span> or a <span style="color:var(--unsafe);font-weight:700;">Bad Touch</span>. Each correct answer earns a point!</p>
-          <button class="btn" style="background:var(--primary);color:white;font-size:1rem; padding:14px 36px;" onclick="startGame()">▶ Start Game</button>
+    <div class="game-shell">
+      <div class="game-wrap">
+        <div id="gstart" class="gstart">
+          <div class="gbig" style="animation:bounce 1.5s infinite;">🎮</div>
+          <h3 style="font-size:1.4rem;font-weight:800;margin-bottom:0.75rem;" data-en="Ready to Play?" data-hi="खेलने के लिए तैयार?">Ready to Play?</h3>
+          <p style="color:var(--text2);max-width:380px;margin:0 auto 2rem;font-size:0.92rem;line-height:1.7;"
+             data-en="You'll see real-life scenarios. Tap Good Touch or Bad Touch for each. 30 seconds per round!"
+             data-hi="आपको वास्तविक जीवन के परिदृश्य दिखाई देंगे। प्रत्येक के लिए अच्छा स्पर्श या बुरा स्पर्श टैप करें।">
+            You'll see real-life scenarios. Tap Good Touch or Bad Touch for each. 30 seconds per round!
+          </p>
+          <button class="btn-primary" onclick="startGame()" data-en="▶ Start Game" data-hi="▶ खेल शुरू करें">▶ Start Game</button>
         </div>
 
-        <div id="game-play-screen" style="display:none;">
-          <div class="game-header">
-            <div style="font-family:'Baloo 2',cursive; font-size:1.1rem; font-weight:700; color:var(--primary);">Round <span id="game-round">1</span></div>
-            <div class="game-score-box">
-              <div class="game-score-item">
-                <div class="game-score-num correct" id="game-correct">0</div>
-                <div class="game-score-label">✓ Correct</div>
-              </div>
-              <div class="game-score-item">
-                <div class="game-score-num wrong" id="game-wrong">0</div>
-                <div class="game-score-label">✗ Wrong</div>
-              </div>
-              <div class="game-score-item">
-                <div class="game-score-num timer" id="game-timer">30</div>
-                <div class="game-score-label">⏱ Seconds</div>
-              </div>
+        <div id="gplay" style="display:none;">
+          <div class="ghead">
+            <div style="font-size:1rem;font-weight:700;color:var(--text3);">
+              <span data-en="Round" data-hi="राउंड">Round</span> <span id="ground">1</span>
+            </div>
+            <div class="gscores">
+              <div class="gscore-item"><div class="gscore-num green" id="gcorrect">0</div><div class="gscore-lbl" data-en="✓ Correct" data-hi="✓ सही">✓ Correct</div></div>
+              <div class="gscore-item"><div class="gscore-num red" id="gwrong">0</div><div class="gscore-lbl" data-en="✗ Wrong" data-hi="✗ गलत">✗ Wrong</div></div>
+              <div class="gscore-item"><div class="gscore-num purple" id="gtimer">30</div><div class="gscore-lbl" data-en="⏱ Secs" data-hi="⏱ सेकंड">⏱ Secs</div></div>
             </div>
           </div>
-
-          <div class="game-scenario-card" id="game-scenario">
-            <div class="scenario-emoji" id="game-emoji">👋</div>
-            <div class="scenario-text" id="game-text">Loading scenario...</div>
+          <div class="gscenario"><div class="gemoji" id="gemoji">👋</div><div class="gtext" id="gtext">Loading...</div></div>
+          <div class="gbtn-row">
+            <button class="gbtn good" onclick="gameAnswer('good')" id="gbgood" data-en="✅ Good Touch" data-hi="✅ अच्छा स्पर्श">✅ Good Touch</button>
+            <button class="gbtn bad" onclick="gameAnswer('bad')" id="gbbad" data-en="🚫 Bad Touch" data-hi="🚫 बुरा स्पर्श">🚫 Bad Touch</button>
           </div>
-
-          <div class="game-buttons">
-            <button class="game-btn good" onclick="gameAnswer('good')" id="btn-good">✅ Good Touch</button>
-            <button class="game-btn bad" onclick="gameAnswer('bad')" id="btn-bad">🚫 Bad Touch</button>
-          </div>
-
-          <div class="game-feedback" id="game-feedback"></div>
-          <div style="text-align:center; margin-top:1rem;">
-            <button class="game-next-btn" id="game-next-btn" onclick="nextGameScenario()">Next Scenario →</button>
+          <div class="gfeedback" id="gfeedback"></div>
+          <div style="text-align:center;margin-top:1rem;">
+            <button class="gnext" id="gnext" onclick="nextScenario()" data-en="Next →" data-hi="अगला →">Next →</button>
           </div>
         </div>
 
-        <div id="game-end-screen" class="game-end">
-          <div class="start-big-icon">🏆</div>
-          <h3 style="font-family:'Baloo 2',cursive; font-size:1.6rem; margin-bottom:0.75rem;">Game Over!</h3>
-          <div style="display:flex; gap:2rem; justify-content:center; margin:1.5rem 0;">
-            <div class="stat-card"><div class="stat-num" style="color:var(--safe);" id="final-correct">0</div><div class="stat-label">Correct</div></div>
-            <div class="stat-card"><div class="stat-num" style="color:var(--unsafe);" id="final-wrong">0</div><div class="stat-label">Wrong</div></div>
-            <div class="stat-card"><div class="stat-num" id="final-score">0%</div><div class="stat-label">Score</div></div>
+        <div id="gend" class="gend" style="display:none;">
+          <div class="gbig">🏆</div>
+          <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;" data-en="Game Over!" data-hi="खेल खत्म!">Game Over!</h3>
+          <div style="display:flex;gap:1.5rem;justify-content:center;margin:1.5rem 0;">
+            <div class="glass-card" style="padding:1.25rem 1.5rem;text-align:center;min-width:100px;">
+              <div style="font-size:1.8rem;font-weight:800;color:#34D399;" id="gfcorrect">0</div>
+              <div style="font-size:0.72rem;color:var(--muted);font-weight:600;" data-en="Correct" data-hi="सही">Correct</div>
+            </div>
+            <div class="glass-card" style="padding:1.25rem 1.5rem;text-align:center;min-width:100px;">
+              <div style="font-size:1.8rem;font-weight:800;color:#F87171;" id="gfwrong">0</div>
+              <div style="font-size:0.72rem;color:var(--muted);font-weight:600;" data-en="Wrong" data-hi="गलत">Wrong</div>
+            </div>
+            <div class="glass-card" style="padding:1.25rem 1.5rem;text-align:center;min-width:100px;">
+              <div style="font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#A78BFA,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="gfscore">0%</div>
+              <div style="font-size:0.72rem;color:var(--muted);font-weight:600;" data-en="Score" data-hi="स्कोर">Score</div>
+            </div>
           </div>
-          <p style="color:var(--muted); font-size:0.95rem; max-width:380px; margin:0 auto 1.5rem;" id="game-result-msg">Keep practicing!</p>
-          <button class="btn" style="background:var(--primary);color:white;" onclick="startGame()">🔄 Play Again</button>
+          <p style="color:var(--muted);font-size:0.92rem;max-width:360px;margin:0 auto 1.5rem;" id="grmsg"></p>
+          <button class="btn-primary" onclick="startGame()" data-en="🔄 Play Again" data-hi="🔄 फिर खेलें">🔄 Play Again</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TIPS TAB -->
+  <!-- ════ DATA TAB ════ -->
+  <div id="tab-data" class="tab-content">
+    <div class="section-header center">
+      <div class="stag" data-en="📊 Statistics" data-hi="📊 आंकड़े">📊 Statistics</div>
+      <h2 class="shead" data-en="Girls Safety Data — <span class='acc'>India</span>" data-hi="लड़कियों की सुरक्षा डेटा — <span class='acc'>भारत</span>">Girls Safety Data — <span class="acc">India</span></h2>
+      <p class="sdesc" data-en="Real data from NCRB, NCPCR, and government reports on child safety and crimes against girls across India. Data from 2019–2023."
+         data-hi="NCRB, NCPCR और सरकारी रिपोर्ट से वास्तविक डेटा। 2019–2023 के आंकड़े।">
+        Real data from NCRB, NCPCR, and government reports on child safety and crimes against girls across India. Data from 2019–2023.
+      </p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="data-stats">
+      <div class="dstat v1">
+        <div class="dstat-num">1,49,404</div>
+        <div class="dstat-label" data-en="Crimes against children reported in India (2022, NCRB)" data-hi="भारत में बच्चों के खिलाफ अपराध रिपोर्ट (2022, NCRB)">Crimes against children reported in India (2022, NCRB)</div>
+      </div>
+      <div class="dstat v2">
+        <div class="dstat-num">94%</div>
+        <div class="dstat-label" data-en="Cases where the abuser was known to the child (family/acquaintance)" data-hi="मामले जहां दुर्व्यवहार करने वाला बच्चे का परिचित था">Cases where the abuser was known to the child (family/acquaintance)</div>
+      </div>
+      <div class="dstat v3">
+        <div class="dstat-num">53%</div>
+        <div class="dstat-label" data-en="Children in India reported sexual abuse (Ministry of WCD study)" data-hi="भारत में बच्चों ने यौन शोषण की रिपोर्ट की (महिला एवं बाल विकास मंत्रालय)">Children in India reported sexual abuse (Ministry of WCD study)</div>
+      </div>
+      <div class="dstat v4">
+        <div class="dstat-num">21%</div>
+        <div class="dstat-label" data-en="Cases that are actually reported to police (vast underreporting exists)" data-hi="वास्तव में पुलिस को रिपोर्ट किए गए मामले (बड़े पैमाने पर कम रिपोर्टिंग)">Cases that are actually reported to police (vast underreporting exists)</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="chart-grid">
+
+      <!-- Bar Chart: State-wise crimes -->
+      <div class="chart-card wide">
+        <div class="chart-title" data-en="State-wise Crimes Against Girls (2022) — Top 10 States" data-hi="राज्यवार लड़कियों के खिलाफ अपराध (2022) — शीर्ष 10 राज्य">State-wise Crimes Against Girls (2022) — Top 10 States</div>
+        <div class="chart-sub" data-en="Source: National Crime Records Bureau (NCRB) Annual Report 2022. Numbers reflect reported cases only." data-hi="स्रोत: राष्ट्रीय अपराध रिकॉर्ड ब्यूरो (NCRB) वार्षिक रिपोर्ट 2022।">Source: National Crime Records Bureau (NCRB) Annual Report 2022. Numbers reflect reported cases only.</div>
+        <div class="chart-wrap" style="height:300px;"><canvas id="chartState"></canvas></div>
+      </div>
+
+      <!-- Line Chart: Trend over years -->
+      <div class="chart-card">
+        <div class="chart-title" data-en="Trend: Child Sexual Abuse Cases in India (2018–2023)" data-hi="प्रवृत्ति: भारत में बाल यौन शोषण के मामले (2018–2023)">Trend: Child Sexual Abuse Cases in India (2018–2023)</div>
+        <div class="chart-sub" data-en="Increasing trend reflects both rising incidents and improved reporting. NCRB data." data-hi="बढ़ती प्रवृत्ति बढ़ती घटनाओं और बेहतर रिपोर्टिंग दोनों को दर्शाती है।">Increasing trend reflects both rising incidents and improved reporting. NCRB data.</div>
+        <div class="chart-wrap"><canvas id="chartTrend"></canvas></div>
+      </div>
+
+      <!-- Pie Chart: Perpetrator type -->
+      <div class="chart-card">
+        <div class="chart-title" data-en="Who Commits Abuse? — Relationship to Victim" data-hi="दुर्व्यवहार कौन करता है? — पीड़ित से संबंध">Who Commits Abuse? — Relationship to Victim</div>
+        <div class="chart-sub" data-en="Ministry of Women & Child Development study. Most abusers are known persons." data-hi="महिला एवं बाल विकास मंत्रालय अध्ययन। अधिकांश दुर्व्यवहारी परिचित लोग हैं।">Ministry of Women &amp; Child Development study. Most abusers are known persons.</div>
+        <div class="chart-wrap"><canvas id="chartPerp"></canvas></div>
+      </div>
+
+      <!-- Bar Chart: Reporting rate -->
+      <div class="chart-card">
+        <div class="chart-title" data-en="Age Group Most Affected by Child Sexual Abuse in India" data-hi="भारत में बाल यौन शोषण से सबसे अधिक प्रभावित आयु वर्ग">Age Group Most Affected by Child Sexual Abuse in India</div>
+        <div class="chart-sub" data-en="Percentage of victims in each age group. NCRB 2022 + WCD study combined." data-hi="प्रत्येक आयु वर्ग में पीड़ितों का प्रतिशत।">Percentage of victims in each age group. NCRB 2022 + WCD study combined.</div>
+        <div class="chart-wrap"><canvas id="chartAge"></canvas></div>
+      </div>
+
+      <!-- Doughnut: types of abuse -->
+      <div class="chart-card">
+        <div class="chart-title" data-en="Types of Abuse Experienced by Children (India)" data-hi="बच्चों द्वारा अनुभव किए गए दुर्व्यवहार के प्रकार (भारत)">Types of Abuse Experienced by Children (India)</div>
+        <div class="chart-sub" data-en="Ministry of WCD 'Study on Child Abuse India' report. Multiple forms often co-occur." data-hi="महिला एवं बाल विकास मंत्रालय 'भारत में बाल दुर्व्यवहार' रिपोर्ट।">Ministry of WCD 'Study on Child Abuse India' report. Multiple forms often co-occur.</div>
+        <div class="chart-wrap"><canvas id="chartType"></canvas></div>
+      </div>
+
+      <!-- Bar Chart: Reporting vs unreported -->
+      <div class="chart-card">
+        <div class="chart-title" data-en="POCSO Cases Filed vs Conviction Rate (2018–2022)" data-hi="POCSO दर्ज मामले बनाम दोषसिद्धि दर (2018–2022)">POCSO Cases Filed vs Conviction Rate (2018–2022)</div>
+        <div class="chart-sub" data-en="Protection of Children from Sexual Offences Act (POCSO) data. Low conviction highlights justice gaps." data-hi="POCSO अधिनियम डेटा। कम दोषसिद्धि न्याय की कमियों को दर्शाती है।">Protection of Children from Sexual Offences Act (POCSO) data. Low conviction highlights justice gaps.</div>
+        <div class="chart-wrap"><canvas id="chartPocso"></canvas></div>
+      </div>
+
+      <!-- Line: awareness vs reporting -->
+      <div class="chart-card">
+        <div class="chart-title" data-en="Childline 1098 Calls About Child Sexual Abuse (2018–2023)" data-hi="बाल यौन शोषण के बारे में चाइल्डलाइन 1098 कॉल (2018–2023)">Childline 1098 Calls About Child Sexual Abuse (2018–2023)</div>
+        <div class="chart-sub" data-en="Childline India Foundation annual data (in thousands). Rising awareness seen post-2020." data-hi="चाइल्डलाइन इंडिया फाउंडेशन वार्षिक डेटा (हजारों में)।">Childline India Foundation annual data (in thousands). Rising awareness seen post-2020.</div>
+        <div class="chart-wrap"><canvas id="chartChildline"></canvas></div>
+      </div>
+
+      <!-- Radar: urban vs rural -->
+      <div class="chart-card">
+        <div class="chart-title" data-en="Urban vs Rural Reporting: Child Abuse by Region Type" data-hi="शहरी बनाम ग्रामीण रिपोर्टिंग: क्षेत्र के अनुसार बाल दुर्व्यवहार">Urban vs Rural Reporting: Child Abuse by Region Type</div>
+        <div class="chart-sub" data-en="Comparative awareness, reporting, conviction and support service access. Estimates from NCRB + NGO data." data-hi="तुलनात्मक जागरूकता, रिपोर्टिंग, दोषसिद्धि और समर्थन सेवा पहुंच।">Comparative awareness, reporting, conviction and support service access. Estimates from NCRB + NGO data.</div>
+        <div class="chart-wrap"><canvas id="chartRadar"></canvas></div>
+      </div>
+
+    </div>
+
+    <!-- DATA TABLE -->
+    <div style="margin-top:2rem;">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--text);" data-en="State-by-State Safety Index — Girls (2022)" data-hi="राज्यवार सुरक्षा सूचकांक — लड़कियां (2022)">State-by-State Safety Index — Girls (2022)</h3>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th data-en="State / UT" data-hi="राज्य / केंद्र शासित प्रदेश">State / UT</th>
+              <th data-en="Reported Cases" data-hi="रिपोर्ट किए गए मामले">Reported Cases</th>
+              <th data-en="Rate per 1L Pop." data-hi="प्रति 1 लाख जनसंख्या दर">Rate per 1L Pop.</th>
+              <th data-en="POCSO Cases" data-hi="POCSO मामले">POCSO Cases</th>
+              <th data-en="Risk Level" data-hi="जोखिम स्तर">Risk Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Uttar Pradesh</td><td>14,553</td><td>6.5</td><td>7,444</td><td><span class="severity-badge severity-high" data-en="High" data-hi="उच्च">High</span></td></tr>
+            <tr><td>Maharashtra</td><td>11,804</td><td>9.9</td><td>5,912</td><td><span class="severity-badge severity-high" data-en="High" data-hi="उच्च">High</span></td></tr>
+            <tr><td>Madhya Pradesh</td><td>11,416</td><td>14.4</td><td>5,708</td><td><span class="severity-badge severity-high" data-en="High" data-hi="उच्च">High</span></td></tr>
+            <tr><td>Rajasthan</td><td>10,098</td><td>13.0</td><td>5,049</td><td><span class="severity-badge severity-high" data-en="High" data-hi="उच्च">High</span></td></tr>
+            <tr><td>Delhi (UT)</td><td>9,684</td><td>43.5</td><td>4,842</td><td><span class="severity-badge severity-high" data-en="High" data-hi="उच्च">High</span></td></tr>
+            <tr><td>West Bengal</td><td>8,231</td><td>8.7</td><td>4,115</td><td><span class="severity-badge severity-med" data-en="Medium" data-hi="मध्यम">Medium</span></td></tr>
+            <tr><td>Bihar</td><td>7,144</td><td>6.4</td><td>3,572</td><td><span class="severity-badge severity-med" data-en="Medium" data-hi="मध्यम">Medium</span></td></tr>
+            <tr><td>Karnataka</td><td>6,839</td><td>10.5</td><td>3,419</td><td><span class="severity-badge severity-med" data-en="Medium" data-hi="मध्यम">Medium</span></td></tr>
+            <tr><td>Tamil Nadu</td><td>5,910</td><td>7.7</td><td>2,955</td><td><span class="severity-badge severity-med" data-en="Medium" data-hi="मध्यम">Medium</span></td></tr>
+            <tr><td>Gujarat</td><td>4,212</td><td>6.3</td><td>2,106</td><td><span class="severity-badge severity-low" data-en="Lower" data-hi="कम">Lower</span></td></tr>
+            <tr><td>Kerala</td><td>3,189</td><td>9.0</td><td>1,594</td><td><span class="severity-badge severity-low" data-en="Lower" data-hi="कम">Lower</span></td></tr>
+            <tr><td>Himachal Pradesh</td><td>892</td><td>12.3</td><td>446</td><td><span class="severity-badge severity-med" data-en="Medium" data-hi="मध्यम">Medium</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="highlight" style="margin-top:2rem;">
+      ⚠️ <strong data-en="Important Note:" data-hi="महत्वपूर्ण नोट:">Important Note:</strong>
+      <span data-en=" Higher reported numbers do NOT always mean more unsafe. States with better awareness, legal infrastructure, and police sensitivity often show higher reported numbers because victims feel safer reporting. Underreporting remains a massive challenge across India."
+            data-hi=" उच्च रिपोर्ट की गई संख्या का हमेशा यह मतलब नहीं है कि वहां अधिक असुरक्षा है। बेहतर जागरूकता और कानूनी बुनियादी ढांचे वाले राज्यों में अधिक रिपोर्टिंग होती है।">
+        Higher reported numbers do NOT always mean more unsafe. States with better awareness, legal infrastructure, and police sensitivity often show higher reported numbers because victims feel safer reporting. Underreporting remains a massive challenge across India.
+      </span>
+    </div>
+  </div>
+
+  <!-- ════ TIPS TAB ════ -->
   <div id="tab-tips" class="tab-content">
-    <div class="section-header">
-      <div class="section-tag">💡 Safety Tips</div>
-      <h2>Staying Safe — A Complete Guide</h2>
-      <p>Detailed advice for children, teenagers, and parents on body safety, boundaries, and what to do if something feels wrong.</p>
+    <div class="section-header center">
+      <div class="stag" data-en="💡 Safety Guide" data-hi="💡 सुरक्षा गाइड">💡 Safety Guide</div>
+      <h2 class="shead" data-en="Staying Safe — <span class='acc'>Complete Guide</span>" data-hi="सुरक्षित रहें — <span class='acc'>सम्पूर्ण गाइड</span>">Staying Safe — <span class="acc">Complete Guide</span></h2>
+      <p class="sdesc" data-en="Detailed advice for children, teenagers, and parents on body safety, boundaries, and what to do if something feels wrong."
+         data-hi="बच्चों, किशोरों और माता-पिता के लिए शरीर सुरक्षा, सीमाओं और सही कदम उठाने के बारे में विस्तृत सलाह।">
+        Detailed advice for children, teenagers, and parents on body safety, boundaries, and what to do if something feels wrong.
+      </p>
     </div>
 
-    <div class="tip-accordion">
-
-      <div class="tip-item">
-        <div class="tip-header" onclick="toggleTip(this)">
-          <span><span class="tip-icon">🧒</span>For Young Children (Ages 3–8)</span>
-          <span class="tip-arrow">▼</span>
+    <div style="max-width:720px;margin:0 auto;">
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">
+          <span>🧒 <span data-en="For Young Children (Ages 3–8)" data-hi="छोटे बच्चों के लिए (उम्र 3–8)">For Young Children (Ages 3–8)</span></span>
+          <span class="acc-arrow">▾</span>
         </div>
-        <div class="tip-body">
-          <p>Teaching young children about body safety should be simple, age-appropriate, and never scary. Use correct names for body parts — this helps children communicate clearly if something happens. Teach them the "bathing suit rule": no one should touch the parts covered by a bathing suit except a doctor with a parent present.</p>
-          <br>
-          <p>Practice saying "No!" loudly and clearly. Role-play scenarios where they practice telling a trusted adult. Remind them that keeping secrets about bodies is never okay — there are no "body secrets." Emphasize that they will never get in trouble for telling the truth about a touch, even if the person said it was a secret.</p>
-          <br>
-          <p>Books, puppets, and simple games make these conversations easier and less intimidating for young children.</p>
+        <div class="acc-body">
+          <p data-en="Teaching young children about body safety should be simple and never scary. Use correct names for body parts — this helps children communicate clearly. Teach them the bathing suit rule: no one should touch areas covered by a bathing suit except a doctor with a parent present. Practice saying No! loudly. Remind them that keeping secrets about bodies is never okay."
+             data-hi="छोटे बच्चों को शरीर सुरक्षा के बारे में सिखाना सरल और कभी भी डरावना नहीं होना चाहिए। शरीर के अंगों के सही नाम का उपयोग करें। उन्हें स्नान सूट नियम सिखाएं: कोई भी उन क्षेत्रों को नहीं छू सकता जो स्नान सूट से ढके हैं।">
+            Teaching young children about body safety should be simple and never scary. Use correct names for body parts — this helps children communicate clearly. Teach them the bathing suit rule: no one should touch areas covered by a bathing suit except a doctor with a parent present. Practice saying No! loudly. Remind them that keeping secrets about bodies is never okay.
+          </p>
         </div>
       </div>
 
-      <div class="tip-item">
-        <div class="tip-header" onclick="toggleTip(this)">
-          <span><span class="tip-icon">🧑</span>For Older Children & Teens (Ages 9–17)</span>
-          <span class="tip-arrow">▼</span>
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">
+          <span>🧑 <span data-en="For Older Children & Teens (Ages 9–17)" data-hi="बड़े बच्चों और किशोरों के लिए (उम्र 9–17)">For Older Children &amp; Teens (Ages 9–17)</span></span>
+          <span class="acc-arrow">▾</span>
         </div>
-        <div class="tip-body">
-          <p>As children grow, the conversations around body safety need to expand. Teens should understand that unwanted touching is never their fault, regardless of what they were wearing, where they were, or what they were doing. Consent is a two-way agreement — both people must freely agree.</p>
-          <br>
-          <p>Online safety is equally important: no one should ask you to share private photos, keep online friendships a secret, or meet up without telling a parent. If an online contact makes you uncomfortable, block them and tell a trusted adult immediately.</p>
-          <br>
-          <p>Peer pressure can sometimes involve touching. It's okay to say no to friends too. True friends respect your boundaries. If someone makes you feel like you "owe" them physical contact, that is a red flag.</p>
-        </div>
-      </div>
-
-      <div class="tip-item">
-        <div class="tip-header" onclick="toggleTip(this)">
-          <span><span class="tip-icon">👨‍👩‍👧</span>For Parents & Caregivers</span>
-          <span class="tip-arrow">▼</span>
-        </div>
-        <div class="tip-body">
-          <p>Regular, calm conversations about body safety are more effective than one-time talks. Start early and revisit the topic as your child grows. Use everyday moments — bath time, doctor visits — as natural opportunities to reinforce body safety concepts.</p>
-          <br>
-          <p>Listen actively when your child talks about discomfort with any person or situation, even if that person is a family member, neighbor, or trusted community member. Statistics show that in most cases of child abuse, the perpetrator is known to the child and family.</p>
-          <br>
-          <p>Teach your child that their body belongs to them — including from family members. Forcing hugs or kisses, even from grandparents, can inadvertently teach children that they don't have control over their bodies. Instead, offer options: "Would you like to hug Grandma, wave, or give a high five?"</p>
-          <br>
-          <p>If your child discloses abuse: stay calm, believe them, thank them for telling you, and seek professional help immediately. Do not investigate on your own or confront the alleged abuser before consulting authorities.</p>
+        <div class="acc-body">
+          <p data-en="Teens should understand that unwanted touching is never their fault, regardless of what they were wearing or where they were. Online safety is equally important: no one should ask you to share private photos. If an online contact makes you uncomfortable, block them and tell a trusted adult. Peer pressure can sometimes involve touching — it's okay to say no to friends too."
+             data-hi="किशोरों को समझना चाहिए कि अवांछित स्पर्श कभी उनकी गलती नहीं है। ऑनलाइन सुरक्षा भी उतनी ही महत्वपूर्ण है: कोई भी आपसे निजी तस्वीरें साझा करने के लिए नहीं कह सकता। दोस्तों को भी 'नहीं' कहना ठीक है।">
+            Teens should understand that unwanted touching is never their fault, regardless of what they were wearing or where they were. Online safety is equally important: no one should ask you to share private photos. If an online contact makes you uncomfortable, block them and tell a trusted adult. Peer pressure can sometimes involve touching — it's okay to say no to friends too.
+          </p>
         </div>
       </div>
 
-      <div class="tip-item">
-        <div class="tip-header" onclick="toggleTip(this)">
-          <span><span class="tip-icon">🚩</span>Warning Signs to Watch For</span>
-          <span class="tip-arrow">▼</span>
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">
+          <span>👨‍👩‍👧 <span data-en="For Parents & Caregivers" data-hi="माता-पिता और देखभालकर्ताओं के लिए">For Parents &amp; Caregivers</span></span>
+          <span class="acc-arrow">▾</span>
         </div>
-        <div class="tip-body">
-          <p>Changes in a child's behavior can sometimes signal that something is wrong. Warning signs include: sudden changes in behavior or personality, nightmares or sleep disturbances, regression to younger behaviors (bedwetting, thumb-sucking), fear of specific people or places, unexplained physical symptoms, and reluctance to discuss what happened at certain places.</p>
-          <br>
-          <p>These signs don't always indicate abuse — they can be caused by many factors — but they warrant a gentle, supportive conversation and possibly professional guidance.</p>
-          <br>
-          <p>Adult grooming behaviors include: seeking one-on-one time with a child, giving gifts or special privileges, encouraging secrecy, gradually testing physical boundaries, and isolating a child from family and friends. Trust your instincts as a parent.</p>
-        </div>
-      </div>
-
-      <div class="tip-item">
-        <div class="tip-header" onclick="toggleTip(this)">
-          <span><span class="tip-icon">🛡️</span>Building a Safety Network</span>
-          <span class="tip-arrow">▼</span>
-        </div>
-        <div class="tip-body">
-          <p>Help your child identify at least 5 trusted adults they can go to if they feel unsafe. This list might include a parent, grandparent, teacher, school counselor, or neighbor. Practice by asking: "If I'm not available and something scary happens, who would you tell?" Make sure these people know they are on your child's safety network.</p>
-          <br>
-          <p>Teach children that if one adult doesn't help or believe them, they should tell another adult and keep telling until someone helps. Persistence is important — children sometimes encounter disbelief and should know this is not their fault.</p>
-          <br>
-          <p>Memorizing emergency numbers and the family's home address (for younger children) is a practical safety skill. Role-play calling for help so children feel confident doing it in a real situation.</p>
+        <div class="acc-body">
+          <p data-en="Regular, calm conversations about body safety are more effective than one-time talks. Listen actively when your child talks about discomfort with any person or situation, even a family member. In most cases of child abuse, the perpetrator is known to the child and family. If your child discloses abuse: stay calm, believe them, thank them for telling you, and seek professional help immediately."
+             data-hi="शरीर सुरक्षा के बारे में नियमित, शांत बातचीत एक बार की बातचीत से अधिक प्रभावी है। जब आपका बच्चा किसी व्यक्ति के साथ असुविधा के बारे में बात करे तो सक्रिय रूप से सुनें। यदि आपका बच्चा दुर्व्यवहार का खुलासा करे: शांत रहें, उनका विश्वास करें और तुरंत पेशेवर मदद लें।">
+            Regular, calm conversations about body safety are more effective than one-time talks. Listen actively when your child talks about discomfort with any person or situation, even a family member. In most cases of child abuse, the perpetrator is known to the child and family. If your child discloses abuse: stay calm, believe them, thank them for telling you, and seek professional help immediately.
+          </p>
         </div>
       </div>
 
-      <div class="tip-item">
-        <div class="tip-header" onclick="toggleTip(this)">
-          <span><span class="tip-icon">🌐</span>Online Safety & Digital Boundaries</span>
-          <span class="tip-arrow">▼</span>
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">
+          <span>🚩 <span data-en="Warning Signs to Watch For" data-hi="चेतावनी संकेत जिन पर ध्यान दें">Warning Signs to Watch For</span></span>
+          <span class="acc-arrow">▾</span>
         </div>
-        <div class="tip-body">
-          <p>In today's world, body safety education must include online safety. Explain to children that online relationships with strangers can carry risks, even if the person seems kind or friendly. No online friend should ask for photos, personal information, or secret meetings.</p>
-          <br>
-          <p>Establish clear family rules about screen time, which apps and platforms children can use, and the importance of telling parents about anyone who makes them uncomfortable online. Ensure privacy settings are appropriately set on all devices.</p>
-          <br>
-          <p>Remind children: anything posted online can be saved and shared. Even if they trust someone, sharing private images is never safe. If they ever receive unwanted images or messages, they should show a trusted adult immediately and not delete the messages (they may be needed as evidence).</p>
+        <div class="acc-body">
+          <p data-en="Warning signs include: sudden changes in behavior or personality, nightmares or sleep disturbances, regression to younger behaviors, fear of specific people or places, unexplained physical symptoms. Adult grooming behaviors include: seeking one-on-one time with a child, giving gifts, encouraging secrecy, gradually testing physical boundaries, and isolating a child from family."
+             data-hi="चेतावनी संकेतों में शामिल हैं: व्यवहार में अचानक बदलाव, दुःस्वप्न, छोटे व्यवहार में वापसी, विशिष्ट लोगों का डर। वयस्क ग्रूमिंग व्यवहार में शामिल हैं: बच्चे के साथ एकांत समय की तलाश, उपहार देना, गोपनीयता को प्रोत्साहित करना।">
+            Warning signs include: sudden changes in behavior or personality, nightmares or sleep disturbances, regression to younger behaviors, fear of specific people or places, unexplained physical symptoms. Adult grooming behaviors include: seeking one-on-one time with a child, giving gifts, encouraging secrecy, gradually testing physical boundaries, and isolating a child from family.
+          </p>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">
+          <span>🛡️ <span data-en="Building a Safety Network" data-hi="सुरक्षा नेटवर्क बनाना">Building a Safety Network</span></span>
+          <span class="acc-arrow">▾</span>
+        </div>
+        <div class="acc-body">
+          <p data-en="Help your child identify at least 5 trusted adults they can go to if they feel unsafe — a parent, grandparent, teacher, school counselor, or neighbor. Practice by asking: If I am not available and something scary happens, who would you tell? Teach children that if one adult doesn't help, tell another and keep telling until someone helps."
+             data-hi="अपने बच्चे को कम से कम 5 विश्वसनीय वयस्कों की पहचान करने में मदद करें जिनके पास वे जा सकते हैं — माता-पिता, दादा-दादी, शिक्षक, स्कूल काउंसलर। बच्चों को सिखाएं कि अगर एक वयस्क मदद नहीं करता, तो दूसरे को बताएं।">
+            Help your child identify at least 5 trusted adults they can go to if they feel unsafe — a parent, grandparent, teacher, school counselor, or neighbor. Practice by asking: If I am not available and something scary happens, who would you tell? Teach children that if one adult doesn't help, tell another and keep telling until someone helps.
+          </p>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc(this)">
+          <span>🌐 <span data-en="Online Safety & Digital Boundaries" data-hi="ऑनलाइन सुरक्षा और डिजिटल सीमाएं">Online Safety &amp; Digital Boundaries</span></span>
+          <span class="acc-arrow">▾</span>
+        </div>
+        <div class="acc-body">
+          <p data-en="Body safety education must include online safety. No online friend should ask for photos, personal information, or secret meetings. Establish clear family rules about screen time and which apps children can use. If children receive unwanted images or messages, they should show a trusted adult immediately and not delete the messages as they may be needed as evidence."
+             data-hi="शरीर सुरक्षा शिक्षा में ऑनलाइन सुरक्षा शामिल होनी चाहिए। कोई भी ऑनलाइन मित्र तस्वीरें या व्यक्तिगत जानकारी नहीं मांग सकता। स्क्रीन टाइम और ऐप्स के बारे में स्पष्ट पारिवारिक नियम बनाएं।">
+            Body safety education must include online safety. No online friend should ask for photos, personal information, or secret meetings. Establish clear family rules about screen time and which apps children can use. If children receive unwanted images or messages, they should show a trusted adult immediately and not delete the messages as they may be needed as evidence.
+          </p>
         </div>
       </div>
 
     </div>
 
-    <div class="emergency-banner" style="margin-top:2.5rem;">
-      <div class="emergency-icon">📞</div>
+    <div class="emer-bar" style="margin-top:2.5rem;">
+      <div class="emer-icon">📞</div>
       <div>
-        <h4>Need help? You're not alone.</h4>
-        <p><strong>Childline India:</strong> 1098 (free, 24/7) &nbsp;|&nbsp; <strong>iCall:</strong> 9152987821 &nbsp;|&nbsp; <strong>Police:</strong> 100 &nbsp;|&nbsp; <strong>Women's Helpline:</strong> 1091. If you or someone you know is in danger, please reach out to a trusted adult or call emergency services immediately.</p>
+        <h4 data-en="Need help? You are not alone." data-hi="मदद चाहिए? आप अकेले नहीं हैं।">Need help? You are not alone.</h4>
+        <p data-en="Childline India: 1098 (free, 24/7) | iCall: 9152987821 | Police: 100 | Women's Helpline: 1091 | POCSO e-box: pocso-eboxportal.ncpcr.gov.in"
+           data-hi="चाइल्डलाइन इंडिया: 1098 (मुफ्त, 24/7) | iCall: 9152987821 | पुलिस: 100 | महिला हेल्पलाइन: 1091">
+          Childline India: 1098 (free, 24/7) | iCall: 9152987821 | Police: 100 | Women's Helpline: 1091 | POCSO e-box: pocso-eboxportal.ncpcr.gov.in
+        </p>
       </div>
     </div>
   </div>
 
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">🛡️ SafeTouch</div>
-  <p>An educational resource to help children, teenagers, and adults understand body safety, consent, and personal boundaries. Every child deserves to feel safe.</p>
-  <p style="margin-top:1rem; font-size:0.8rem; opacity:0.6;">This website is for educational purposes. If you or someone you know is in immediate danger, contact emergency services.</p>
+  <div class="foot-logo" data-en="🛡️ SafeTouch India" data-hi="🛡️ सेफटच इंडिया">🛡️ SafeTouch India</div>
+  <p data-en="An educational resource to help children, teenagers, and adults understand body safety, consent, and personal boundaries. Every child deserves to feel safe."
+     data-hi="बच्चों, किशोरों और वयस्कों को शरीर सुरक्षा, सहमति और व्यक्तिगत सीमाओं को समझने में मदद करने के लिए एक शैक्षणिक संसाधन।">
+    An educational resource to help children, teenagers, and adults understand body safety, consent, and personal boundaries. Every child deserves to feel safe.
+  </p>
+  <p style="margin-top:0.75rem;font-size:0.75rem;opacity:0.5;" data-en="Data sourced from NCRB, Ministry of WCD, NCPCR, and Childline India Foundation. For educational purposes only."
+     data-hi="डेटा NCRB, महिला एवं बाल विकास मंत्रालय, NCPCR और चाइल्डलाइन इंडिया फाउंडेशन से लिया गया है।">
+    Data sourced from NCRB, Ministry of WCD, NCPCR, and Childline India Foundation. For educational purposes only.
+  </p>
 </footer>
 
 <script>
-  // TAB SWITCHING
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + tabId).classList.add('active');
-    const tabs = ['learn','body-map','quiz','game','tips'];
-    const tabEls = document.querySelectorAll('.main-tab');
-    const idx = tabs.indexOf(tabId);
-    if (idx >= 0 && tabEls[idx]) tabEls[idx].classList.add('active');
-    document.getElementById('main-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+// ── LANGUAGE ────────────────────────────────────────────────────
+let currentLang = 'en';
 
-  // BODY MAP
-  const zoneData = {
-    head: {
-      title: 'Head & Face', type: 'caution', typeName: 'Context Matters',
-      text: 'The head and face are generally okay to touch in caring ways — a parent kissing your forehead, a doctor checking your ears or eyes, a friend patting your head affectionately. However, you always have the right to say no to any touch on your face or head that you don\'t like. No one should hit your head or touch your face in a way that hurts or scares you.'
-    },
-    neck: {
-      title: 'Neck & Throat', type: 'caution', typeName: 'Context Matters',
-      text: 'The neck area can be touched in caring ways — a hug involves arms near the neck. However, any touch to the neck that feels choking, squeezing, or scary is absolutely NOT okay. If anyone grabs your neck in a threatening way, tell a trusted adult immediately. A doctor may check your neck during a health examination.'
-    },
-    arms: {
-      title: 'Arms & Hands', type: 'safe', typeName: 'Generally Safe',
-      text: 'Arms and hands are the most commonly touched body parts — handshakes, high-fives, holding hands with friends or family, and a supportive hand on the shoulder are all typically safe and caring touches. However, if someone grabs your arm to force you somewhere, or holds your hand in a way that makes you uncomfortable, that is NOT okay. You always have the right to say no.'
-    },
-    chest: {
-      title: 'Chest Area', type: 'unsafe', typeName: 'Private — Protected',
-      text: 'The chest area is a private part of your body. For girls especially, the chest should not be touched by anyone except a doctor during a medical examination (with a parent or guardian present). Anyone who tries to touch your chest area without your permission is doing something WRONG. Tell a trusted adult immediately if this happens. You are never at fault.'
-    },
-    belly: {
-      title: 'Stomach & Belly', type: 'caution', typeName: 'Context Matters',
-      text: 'The belly area can sometimes be touched innocently — a parent checking for a stomach ache, or a younger sibling poking you playfully. However, if anyone touches your belly in a way that makes you feel uncomfortable or scared, say "No!" clearly and tell a trusted adult. Medical professionals may examine this area during check-ups with a parent present.'
-    },
-    private: {
-      title: 'Private Parts', type: 'unsafe', typeName: '⚠ Strictly Private',
-      text: 'Private parts — the areas covered by a swimsuit — should NEVER be touched by anyone except a doctor during a health check-up, with your parent or guardian present. This rule applies to everyone, including family members, friends, teachers, or any adult. If anyone touches, tries to touch, or asks to see your private parts, this is WRONG. Say "No!", get away, and tell a trusted adult right away. It is NEVER your fault.'
-    },
-    legs: {
-      title: 'Legs & Feet', type: 'safe', typeName: 'Generally Safe',
-      text: 'Legs and feet are generally safe areas — a parent holding your hand while crossing the street, a doctor checking your reflexes, or a teammate patting your back after a game. However, touching around the upper thigh area (near private parts) by anyone other than a doctor with a parent present is NOT okay. If a touch near your legs makes you feel uncomfortable, trust that feeling and tell a trusted adult.'
-    },
-    mouth: {
-      title: 'Mouth & Lips', type: 'caution', typeName: 'Context Matters',
-      text: 'Your mouth belongs to you. A parent or grandparent may give a peck on the cheek or lips as a greeting — but you always have the right to say no or turn your cheek. No adult or older child should ever kiss you on the lips in a way that makes you uncomfortable, or ask you to kiss them. Any sexual contact involving the mouth is absolutely wrong. If something feels off, tell a trusted adult.'
-    }
-  };
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.getElementById('btn-hi').classList.toggle('active', lang==='hi');
+  document.body.classList.toggle('hindi-mode', lang==='hi');
 
-  function showZone(zone) {
-    const panel = document.getElementById('zone-info-panel');
-    const data = zoneData[zone];
-    if (!data) return;
-    panel.className = 'zone-info-panel ' + data.type + '-zone';
-    panel.innerHTML = `
-      <div class="zone-type-badge">${data.typeName}</div>
-      <h4>${data.title}</h4>
-      <p>${data.text}</p>
-    `;
-  }
-
-  // QUIZ
-  const quizQuestions = [
-    { q: "Your aunt gives you a big hug when she sees you at a family gathering. How is this?", opts: ["Good touch", "Bad touch", "Depends on how you feel", "Neither"], correct: 2, exp: "Correct! If a hug from a family member makes you feel happy and loved, it's a good touch. But if it makes you uncomfortable, it's okay to say no — even to relatives." },
-    { q: "A stranger asks to give you candy if you sit on their lap. This is:", opts: ["Good touch", "Definitely a bad touch", "Okay if there are people nearby", "Fine if you want candy"], correct: 1, exp: "Correct! Strangers asking children to sit on their lap, especially with gifts, is a major warning sign. Say no and tell a trusted adult immediately." },
-    { q: "A doctor checks your ears and eyes during a health exam, while your parent is in the room. This is:", opts: ["Bad touch", "Good touch", "A secret touch", "Wrong"], correct: 1, exp: "Correct! A doctor examining you during a check-up with a parent present is a good, safe touch. Medical care is necessary and safe." },
-    { q: "Someone tells you they will give you a gift if you keep a touch 'our little secret.' This is:", opts: ["Good because of the gift", "A warning sign of a bad touch", "Okay if you trust them", "Only bad if you feel scared"], correct: 1, exp: "Correct! Asking for secrecy about a touch is ALWAYS a warning sign. Safe touches don't need to be secrets. Tell a trusted adult immediately." },
-    { q: "Your friend holds your hand as you both cross a busy street. This is:", opts: ["Bad touch", "Depends on age", "Good touch", "Too close"], correct: 2, exp: "Correct! Holding hands while crossing a street with a friend is a safe, caring touch that keeps you both safe." },
-    { q: "An older child touches your private parts and says everyone does this. What should you do?", opts: ["Believe them and stay quiet", "Say no, leave, and tell a trusted adult", "Keep it a secret", "Do nothing if they're older"], correct: 1, exp: "Correct! Private parts should never be touched by others. Say no, get away, and tell a trusted adult immediately. It is never your fault." },
-    { q: "Your parent washes your hair during bath time. This is:", opts: ["Bad touch", "Private touch", "Good touch", "Unsafe"], correct: 2, exp: "Correct! A parent helping you with hygiene like washing hair is a safe, caring touch — it's normal caregiving." },
-    { q: "Someone online asks you to share a photo of your body. You should:", opts: ["Share it if they seem nice", "Say no and tell a trusted adult", "Ask them to share one first", "Only share if they're a friend"], correct: 1, exp: "Correct! No one online should ever ask for photos of your body. Say no, block them, and immediately tell a trusted adult." },
-    { q: "A classmate pats you on the back after you won a race. How is this?", opts: ["Bad touch", "Unsafe touch", "Good touch", "Private touch"], correct: 2, exp: "Correct! A friendly pat on the back to celebrate is a positive, appropriate touch between classmates." },
-    { q: "Your teacher hugs you when no other adults are around and asks you not to tell. This is:", opts: ["Okay — teachers are trusted", "A warning sign", "Only okay if you like it", "Normal"], correct: 1, exp: "Correct! Any touch that involves secrecy — even from a teacher — is a warning sign. Trusted adults don't ask children to keep touch a secret." },
-    { q: "Which of these is a good touch?", opts: ["Being hit by a sibling", "A handshake with a new friend", "An adult touching private parts", "A touch you were threatened about"], correct: 1, exp: "Correct! A handshake is a safe, respectful greeting between people." },
-    { q: "If someone touches you in a bad way, whose fault is it?", opts: ["Your fault for not saying no", "Your fault for being there", "The person who touched you", "Equally both of your faults"], correct: 2, exp: "Correct! It is ALWAYS the fault of the person who touched you inappropriately. It is NEVER a child's fault, no matter what." },
-    { q: "Your private parts are the areas covered by a:", opts: ["T-shirt", "Swimsuit / underwear", "Hat", "School uniform"], correct: 1, exp: "Correct! Private parts are those covered by a swimsuit or underwear — chest (for girls), bottom, and genitals. These are always private." },
-    { q: "If a trusted adult doesn't believe you when you report a bad touch, you should:", opts: ["Stop trying to tell", "Assume you were wrong", "Tell another trusted adult", "Keep the secret"], correct: 2, exp: "Correct! If one adult doesn't listen, tell another and keep telling until someone helps you. You deserve to be believed and protected." },
-    { q: "Good touches usually make you feel:", opts: ["Scared and confused", "Safe, happy, and loved", "Like keeping a secret", "Ashamed"], correct: 1, exp: "Correct! Good touches make you feel safe, happy, and cared for. If a touch makes you feel scared, confused, or ashamed, it's a warning sign." }
-  ];
-
-  let qIdx = 0, qScore = 0, qAnswered = false;
-
-  function loadQuestion() {
-    const q = quizQuestions[qIdx];
-    document.getElementById('quiz-counter').textContent = `Question ${qIdx + 1} of ${quizQuestions.length}`;
-    document.getElementById('quiz-progress').style.width = `${(qIdx / quizQuestions.length) * 100}%`;
-    document.getElementById('quiz-question').textContent = q.q;
-    const opts = document.getElementById('quiz-options');
-    opts.innerHTML = '';
-    const letters = ['A', 'B', 'C', 'D'];
-    q.opts.forEach((opt, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'quiz-opt';
-      btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
-      btn.onclick = () => selectAnswer(i);
-      opts.appendChild(btn);
-    });
-    document.getElementById('quiz-feedback').className = 'quiz-feedback';
-    document.getElementById('quiz-next').style.display = 'none';
-    qAnswered = false;
-  }
-
-  function selectAnswer(i) {
-    if (qAnswered) return;
-    qAnswered = true;
-    const q = quizQuestions[qIdx];
-    const opts = document.querySelectorAll('.quiz-opt');
-    opts.forEach(o => o.disabled = true);
-    const fb = document.getElementById('quiz-feedback');
-    if (i === q.correct) {
-      qScore++;
-      opts[i].classList.add('correct');
-      fb.className = 'quiz-feedback correct';
-      document.getElementById('quiz-feedback-icon').textContent = '✅';
-    } else {
-      opts[i].classList.add('wrong');
-      opts[q.correct].classList.add('correct');
-      fb.className = 'quiz-feedback wrong';
-      document.getElementById('quiz-feedback-icon').textContent = '❌';
-    }
-    document.getElementById('quiz-feedback-text').textContent = q.exp;
-    document.getElementById('quiz-next').style.display = 'block';
-  }
-
-  document.getElementById('quiz-next').onclick = function () {
-    qIdx++;
-    if (qIdx >= quizQuestions.length) {
-      document.getElementById('quiz-main').style.display = 'none';
-      const result = document.getElementById('quiz-result');
-      result.style.display = 'block';
-      document.getElementById('result-score').textContent = qScore;
-      document.getElementById('result-total').textContent = '/ ' + quizQuestions.length;
-      const pct = Math.round((qScore / quizQuestions.length) * 100);
-      if (pct >= 80) {
-        document.getElementById('result-title').textContent = '🌟 Excellent Work!';
-        document.getElementById('result-msg').textContent = `You scored ${pct}%! You have a great understanding of body safety. Keep sharing what you've learned!`;
-      } else if (pct >= 60) {
-        document.getElementById('result-title').textContent = '👍 Good Job!';
-        document.getElementById('result-msg').textContent = `You scored ${pct}%. You're learning well! Review the Learn section to strengthen your knowledge further.`;
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (val !== null) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'BUTTON') {
+        el.textContent = val;
       } else {
-        document.getElementById('result-title').textContent = '📚 Keep Learning!';
-        document.getElementById('result-msg').textContent = `You scored ${pct}%. Don't worry — visit the Learn section and try again. Understanding body safety is so important!`;
+        el.innerHTML = val;
       }
-    } else {
-      loadQuestion();
     }
-  };
+  });
 
-  function restartQuiz() {
-    qIdx = 0; qScore = 0;
-    document.getElementById('quiz-main').style.display = 'block';
-    document.getElementById('quiz-result').style.display = 'none';
-    loadQuestion();
+  // Re-render quiz question if active
+  if (qIdx < quizQuestions.length) renderQuestion();
+  // Re-render game scenario
+  if (gActive && gOrder.length > 0 && gIdx < gOrder.length) renderScenario();
+}
+
+// ── TABS ────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  const tabs = ['learn','body-map','quiz','game','data','tips'];
+  const idx = tabs.indexOf(id);
+  const tabBtns = document.querySelectorAll('.mtab');
+  if (idx >= 0 && tabBtns[idx]) tabBtns[idx].classList.add('active');
+
+  const navLinks = document.querySelectorAll('.nav-links a');
+  navLinks.forEach((a,i) => {
+    if(i===idx) a.classList.add('active');
+    else a.classList.remove('active');
+  });
+
+  document.getElementById('main-section').scrollIntoView({behavior:'smooth',block:'start'});
+  if (id === 'data') setTimeout(initCharts, 200);
+}
+
+// ── BODY MAP ────────────────────────────────────────────────────
+const zoneData = {
+  head: { type:'caution', badge:'caution',
+    en_name:'Head & Face', en_badge:'Context Matters',
+    en_text:'The head and face are generally okay to touch in caring ways — a parent kissing your forehead, a doctor checking your ears, a friend patting your head. However, you always have the right to say no to any touch on your face or head that you do not like. No one should hit your head or touch your face in a way that hurts or scares you.',
+    hi_name:'सिर और चेहरा', hi_badge:'संदर्भ महत्वपूर्ण',
+    hi_text:'सिर और चेहरे को देखभाल भरे तरीकों से छूना आमतौर पर ठीक है — जैसे माता-पिता का माथे पर चुंबन। लेकिन आपको हमेशा अपने चेहरे या सिर पर किसी भी स्पर्श के लिए ना कहने का अधिकार है।'
+  },
+  neck: { type:'caution', badge:'caution',
+    en_name:'Neck & Throat', en_badge:'Context Matters',
+    en_text:'The neck area can be touched in caring ways during a hug. However, any touch to the neck that feels choking, squeezing, or scary is absolutely NOT okay. If anyone grabs your neck in a threatening way, tell a trusted adult immediately.',
+    hi_name:'गर्दन और गला', hi_badge:'संदर्भ महत्वपूर्ण',
+    hi_text:'गले को गले लगाने के दौरान छुआ जा सकता है। लेकिन कोई भी स्पर्श जो घुटन, निचोड़ने या डरावना महसूस कराए वह बिल्कुल ठीक नहीं है।'
+  },
+  arms: { type:'safe', badge:'safe',
+    en_name:'Arms & Hands', en_badge:'Generally Safe',
+    en_text:'Arms and hands are the most commonly touched body parts — handshakes, high-fives, holding hands with friends or family are all typically safe. However, if someone grabs your arm to force you somewhere, that is NOT okay. You always have the right to say no.',
+    hi_name:'भुजाएं और हाथ', hi_badge:'आमतौर पर सुरक्षित',
+    hi_text:'भुजाएं और हाथ सबसे अधिक छुए जाने वाले शरीर के अंग हैं — हाथ मिलाना, हाई-फाइव सभी आमतौर पर सुरक्षित हैं। लेकिन अगर कोई आपकी भुजा पकड़कर जबरदस्ती ले जाए तो यह ठीक नहीं है।'
+  },
+  chest: { type:'danger', badge:'danger',
+    en_name:'Chest Area', en_badge:'Private — Protected',
+    en_text:'The chest area is a private part of your body. For girls especially, the chest should not be touched by anyone except a doctor during a medical examination with a parent present. Anyone who tries to touch your chest area without permission is doing something WRONG. Tell a trusted adult immediately.',
+    hi_name:'छाती का क्षेत्र', hi_badge:'निजी — संरक्षित',
+    hi_text:'छाती का क्षेत्र आपके शरीर का निजी हिस्सा है। किसी को भी — सिवाय माता-पिता की उपस्थिति में डॉक्टर के — आपकी छाती को छूने का अधिकार नहीं है।'
+  },
+  belly: { type:'caution', badge:'caution',
+    en_name:'Stomach & Belly', en_badge:'Context Matters',
+    en_text:'The belly area can sometimes be touched innocently — a parent checking for a stomach ache. However, if anyone touches your belly in a way that makes you feel uncomfortable or scared, say No clearly and tell a trusted adult.',
+    hi_name:'पेट', hi_badge:'संदर्भ महत्वपूर्ण',
+    hi_text:'पेट के क्षेत्र को कभी-कभी मासूमियत से छुआ जा सकता है — जैसे माता-पिता पेट दर्द की जांच करते समय। लेकिन कोई भी स्पर्श जो असहज करे उसके लिए स्पष्ट ना कहें।'
+  },
+  private: { type:'danger', badge:'danger',
+    en_name:'Private Parts', en_badge:'⚠ Strictly Private',
+    en_text:'Private parts — the areas covered by a swimsuit — should NEVER be touched by anyone except a doctor during a health check-up, with your parent or guardian present. If anyone touches, tries to touch, or asks to see your private parts, say No, get away, and tell a trusted adult right away. It is NEVER your fault.',
+    hi_name:'निजी अंग', hi_badge:'⚠ सख्ती से निजी',
+    hi_text:'निजी अंग — स्विमसूट से ढके क्षेत्र — को कभी भी माता-पिता की उपस्थिति में डॉक्टर के अलावा किसी को भी नहीं छूना चाहिए। यह कभी आपकी गलती नहीं है।'
+  },
+  legs: { type:'safe', badge:'safe',
+    en_name:'Legs & Feet', en_badge:'Generally Safe',
+    en_text:'Legs and feet are generally safe areas. However, touching around the upper thigh area by anyone other than a doctor with a parent present is NOT okay. If a touch near your legs makes you feel uncomfortable, trust that feeling and tell a trusted adult.',
+    hi_name:'पैर और पैर के पंजे', hi_badge:'आमतौर पर सुरक्षित',
+    hi_text:'पैर आमतौर पर सुरक्षित क्षेत्र हैं। लेकिन ऊपरी जांघ के आसपास किसी भी स्पर्श के लिए जो असहज करे — अपनी भावना पर भरोसा करें।'
+  },
+  mouth: { type:'caution', badge:'caution',
+    en_name:'Mouth & Lips', en_badge:'Context Matters',
+    en_text:'Your mouth belongs to you. A parent may give a peck on the cheek — but you always have the right to say no. No adult or older child should ever kiss you on the lips in a way that makes you uncomfortable.',
+    hi_name:'मुंह और होंठ', hi_badge:'संदर्भ महत्वपूर्ण',
+    hi_text:'आपका मुंह आपका है। माता-पिता गाल पर चुंबन दे सकते हैं — लेकिन आपको हमेशा ना कहने का अधिकार है। कोई भी वयस्क आपको असहज तरीके से नहीं छू सकता।'
   }
+};
 
-  loadQuestion();
+function showZone(zone) {
+  const d = zoneData[zone];
+  const panel = document.getElementById('zone-panel');
+  const name = currentLang === 'hi' ? d.hi_name : d.en_name;
+  const badge = currentLang === 'hi' ? d.hi_badge : d.en_badge;
+  const text = currentLang === 'hi' ? d.hi_text : d.en_text;
+  panel.className = 'zone-panel ' + (d.type === 'safe' ? 'safe-p' : d.type === 'danger' ? 'danger-p' : 'caution-p');
+  panel.innerHTML = `<div class="zbadge ${d.badge}">${badge}</div><h4>${name}</h4><p>${text}</p>`;
+}
 
-  // GAME
-  const gameScenarios = [
-    { emoji: '🤗', text: 'Your grandparent gives you a warm hug when you visit them on a holiday.', answer: 'good', why: 'A caring hug from a grandparent is a loving, safe touch!' },
-    { emoji: '🤝', text: 'A new classmate extends their hand for a handshake when you meet for the first time.', answer: 'good', why: 'A handshake is a polite, respectful greeting between people.' },
-    { emoji: '😨', text: 'An adult you barely know keeps touching your hair and won\'t stop even when you say you don\'t like it.', answer: 'bad', why: 'Any touch that continues after you say "no" is a bad touch. Your "no" must be respected.' },
-    { emoji: '⚕️', text: 'A doctor examines your tummy for pain while your mom sits next to you and the doctor explains everything.', answer: 'good', why: 'A doctor doing a medical exam with a parent present is a safe, necessary touch.' },
-    { emoji: '🎁', text: 'An older neighbor offers to give you a gift in exchange for letting them touch your private parts.', answer: 'bad', why: 'This is a VERY SERIOUS bad touch! Run away, say no, and tell a trusted adult immediately!' },
-    { emoji: '✋', text: 'Your best friend gives you a high-five after you both score in a game.', answer: 'good', why: 'High-fives are fun, celebratory, and safe!' },
-    { emoji: '💇', text: 'A parent washes your hair gently during your bath because you asked for help.', answer: 'good', why: 'A parent helping with hygiene when you ask is a caring, safe touch.' },
-    { emoji: '🤫', text: 'A family friend touches you and says "This is our special secret — don\'t tell your parents."', answer: 'bad', why: 'Any touch that requires secrecy is a warning sign. Safe touches don\'t need to be kept secret!' },
-    { emoji: '🏃', text: 'A coach pats your back after you finish a race to say "well done."', answer: 'good', why: 'An encouraging pat on the back in a public setting from a coach is a positive, supportive touch.' },
-    { emoji: '😠', text: 'A classmate pushes you hard and hits your shoulder because you took their toy.', answer: 'bad', why: 'Pushing and hitting are bad touches that cause physical harm. Tell a teacher immediately.' },
-    { emoji: '🩺', text: 'Your school nurse checks your temperature with a thermometer because you said you feel sick.', answer: 'good', why: 'A nurse checking your temperature is standard medical care and a safe touch.' },
-    { emoji: '📱', text: 'Someone you met online asks you to take a photo of your body and send it to them.', answer: 'bad', why: 'NEVER share photos of your body online! Tell a trusted adult right away.' },
-    { emoji: '🙌', text: 'Your teacher shakes your hand and gives you a certificate for winning a prize.', answer: 'good', why: 'A formal handshake to congratulate you is a respectful, appropriate touch.' },
-    { emoji: '😰', text: 'An adult grabs your arm tightly and forces you to go somewhere you don\'t want to go.', answer: 'bad', why: 'Being grabbed and forced to go somewhere against your will is a dangerous bad touch. Shout for help!' },
-    { emoji: '🏥', text: 'A nurse gives you an injection at the hospital while your parent holds your hand.', answer: 'good', why: 'Medical injections done by healthcare professionals with a parent present are safe medical care.' },
-    { emoji: '🤐', text: 'An older student says you must hug them or they will tell everyone a secret about you.', answer: 'bad', why: 'Any touch involving threats or blackmail is absolutely a bad touch. Tell a trusted adult immediately.' },
-    { emoji: '👋', text: 'A friend waves at you from across the room — no touching at all.', answer: 'good', why: 'Waving is a friendly, completely safe way to greet someone without touching.' },
-    { emoji: '😔', text: 'A family member tickles you even after you have said "stop" and "no" multiple times.', answer: 'bad', why: 'Continuing to tickle after someone says "stop" ignores your "no" — that makes it a bad touch.' },
-    { emoji: '❤️', text: 'Your parent holds your hand while walking through a busy market to keep you safe.', answer: 'good', why: 'A parent holding your hand for safety is a caring, protective touch.' },
-    { emoji: '🙅', text: 'Someone shows you pictures of private body parts on their phone and asks if you want to see more.', answer: 'bad', why: 'Showing children inappropriate pictures is WRONG. Leave immediately and tell a trusted adult.' }
-  ];
+// ── QUIZ ─────────────────────────────────────────────────────────
+const quizQuestions = [
+  { en_q:"Your aunt gives you a big hug at a family gathering. How is this?", en_opts:["Good touch","Bad touch","Depends on how you feel","Neither"], correct:2,
+    en_exp:"Correct! If a family hug makes you happy, it's good. But if it makes you uncomfortable, it's okay to say no — even to relatives.",
+    hi_q:"आपकी मौसी परिवार की सभा में आपको गले लगाती हैं। यह कैसा है?", hi_opts:["अच्छा स्पर्श","बुरा स्पर्श","आपकी भावना पर निर्भर","कोई नहीं"],
+    hi_exp:"सही! अगर परिवार का गले लगाना आपको खुश करता है तो यह अच्छा है। लेकिन अगर असहज लगे तो ना कहना ठीक है।" },
+  { en_q:"A stranger asks to give you candy if you sit on their lap. This is:", en_opts:["Good touch","Definitely a bad touch","Okay if people are nearby","Fine if you want candy"], correct:1,
+    en_exp:"Correct! Strangers asking children to sit on their lap with gifts is a major warning sign. Say no and tell a trusted adult.",
+    hi_q:"एक अजनबी आपसे उनकी गोद में बैठने के बदले में मिठाई देने की पेशकश करता है। यह है:", hi_opts:["अच्छा स्पर्श","निश्चित रूप से बुरा स्पर्श","ठीक है अगर लोग पास हैं","ठीक है अगर आपको मिठाई चाहिए"],
+    hi_exp:"सही! अजनबी द्वारा बच्चों को उपहार के साथ गोद में बिठाना एक बड़ा चेतावनी संकेत है।" },
+  { en_q:"A doctor checks your ears and eyes during a health exam while your parent is in the room. This is:", en_opts:["Bad touch","Good touch","A secret touch","Wrong"], correct:1,
+    en_exp:"Correct! A doctor examining you during a check-up with a parent present is a good, safe touch.",
+    hi_q:"एक डॉक्टर स्वास्थ्य परीक्षा के दौरान आपके कान और आंखें जांचता है जबकि आपके माता-पिता कमरे में हैं। यह है:", hi_opts:["बुरा स्पर्श","अच्छा स्पर्श","गुप्त स्पर्श","गलत"],
+    hi_exp:"सही! माता-पिता की उपस्थिति में डॉक्टर द्वारा जांच एक अच्छा, सुरक्षित स्पर्श है।" },
+  { en_q:"Someone tells you they will give you a gift if you keep a touch 'our little secret.' This is:", en_opts:["Good because of the gift","A warning sign of a bad touch","Okay if you trust them","Only bad if you feel scared"], correct:1,
+    en_exp:"Correct! Asking for secrecy about a touch is ALWAYS a warning sign. Safe touches don't need to be secrets.",
+    hi_q:"कोई कहता है कि यदि आप एक स्पर्श को 'हमारा छोटा रहस्य' रखें तो वे आपको उपहार देंगे। यह है:", hi_opts:["उपहार के कारण अच्छा","बुरे स्पर्श की चेतावनी","ठीक है अगर आप उन पर भरोसा करते हैं","केवल बुरा अगर आप डरे हुए हैं"],
+    hi_exp:"सही! स्पर्श के बारे में गोपनीयता मांगना हमेशा एक चेतावनी संकेत है।" },
+  { en_q:"Your friend holds your hand as you both cross a busy street. This is:", en_opts:["Bad touch","Depends on age","Good touch","Too close"], correct:2,
+    en_exp:"Correct! Holding hands while crossing a street with a friend is a safe, caring touch.",
+    hi_q:"आपका दोस्त व्यस्त सड़क पार करते समय आपका हाथ थामता है। यह है:", hi_opts:["बुरा स्पर्श","उम्र पर निर्भर","अच्छा स्पर्श","बहुत करीब"],
+    hi_exp:"सही! दोस्त के साथ सड़क पार करते समय हाथ थामना एक सुरक्षित, देखभाल भरा स्पर्श है।" },
+  { en_q:"An older child touches your private parts and says everyone does this. What should you do?", en_opts:["Believe them and stay quiet","Say no, leave, and tell a trusted adult","Keep it a secret","Do nothing if they're older"], correct:1,
+    en_exp:"Correct! Private parts should never be touched by others. Say no, get away, and tell a trusted adult immediately.",
+    hi_q:"एक बड़ा बच्चा आपके निजी अंगों को छूता है और कहता है सभी ऐसा करते हैं। आपको क्या करना चाहिए?", hi_opts:["उन पर विश्वास करें और चुप रहें","ना कहें, जाएं और किसी विश्वसनीय वयस्क को बताएं","इसे रहस्य रखें","कुछ न करें अगर वे बड़े हैं"],
+    hi_exp:"सही! निजी अंगों को कभी भी दूसरों द्वारा नहीं छुआ जाना चाहिए।" },
+  { en_q:"Your parent washes your hair during bath time. This is:", en_opts:["Bad touch","Private touch","Good touch","Unsafe"], correct:2,
+    en_exp:"Correct! A parent helping you with hygiene like washing hair is a safe, caring touch.",
+    hi_q:"आपके माता-पिता नहाते समय आपके बाल धोते हैं। यह है:", hi_opts:["बुरा स्पर्श","निजी स्पर्श","अच्छा स्पर्श","असुरक्षित"],
+    hi_exp:"सही! माता-पिता द्वारा बाल धोना एक सुरक्षित, देखभाल भरा स्पर्श है।" },
+  { en_q:"Someone online asks you to share a photo of your body. You should:", en_opts:["Share it if they seem nice","Say no and tell a trusted adult","Ask them to share one first","Only share if they're a friend"], correct:1,
+    en_exp:"Correct! No one online should ever ask for photos of your body. Say no, block them, and tell a trusted adult.",
+    hi_q:"ऑनलाइन कोई आपके शरीर की तस्वीर मांगता है। आपको:", hi_opts:["अगर वे अच्छे लगें तो साझा करें","ना कहें और किसी विश्वसनीय वयस्क को बताएं","उनसे पहले एक साझा करने के लिए कहें","केवल तब साझा करें अगर वे मित्र हैं"],
+    hi_exp:"सही! कोई भी ऑनलाइन आपके शरीर की तस्वीरें नहीं मांग सकता।" },
+  { en_q:"A classmate pats you on the back after you won a race. How is this?", en_opts:["Bad touch","Unsafe touch","Good touch","Private touch"], correct:2,
+    en_exp:"Correct! A friendly pat on the back to celebrate is a positive, appropriate touch between classmates.",
+    hi_q:"एक सहपाठी रेस जीतने के बाद आपकी पीठ थपथपाता है। यह कैसा है?", hi_opts:["बुरा स्पर्श","असुरक्षित स्पर्श","अच्छा स्पर्श","निजी स्पर्श"],
+    hi_exp:"सही! जश्न मनाने के लिए पीठ थपथपाना एक सकारात्मक, उचित स्पर्श है।" },
+  { en_q:"Your teacher hugs you when no other adults are around and asks you not to tell. This is:", en_opts:["Okay — teachers are trusted","A warning sign","Only okay if you like it","Normal"], correct:1,
+    en_exp:"Correct! Any touch that involves secrecy — even from a teacher — is a warning sign. Trusted adults don't ask children to keep touch a secret.",
+    hi_q:"आपका शिक्षक आपको तब गले लगाता है जब कोई अन्य वयस्क नहीं होता और कहता है किसी को न बताएं। यह है:", hi_opts:["ठीक है — शिक्षक विश्वसनीय हैं","एक चेतावनी संकेत","केवल ठीक है अगर आपको पसंद हो","सामान्य"],
+    hi_exp:"सही! कोई भी स्पर्श जिसमें गोपनीयता हो — शिक्षक से भी — एक चेतावनी संकेत है।" },
+  { en_q:"Which of these is a good touch?", en_opts:["Being hit by a sibling","A handshake with a new friend","An adult touching private parts","A touch with threats"], correct:1,
+    en_exp:"Correct! A handshake is a safe, respectful greeting between people.",
+    hi_q:"इनमें से कौन सा अच्छा स्पर्श है?", hi_opts:["भाई-बहन द्वारा मारना","नए मित्र के साथ हाथ मिलाना","एक वयस्क द्वारा निजी अंगों को छूना","धमकियों के साथ स्पर्श"],
+    hi_exp:"सही! हाथ मिलाना लोगों के बीच एक सुरक्षित, सम्मानजनक अभिवादन है।" },
+  { en_q:"If someone touches you in a bad way, whose fault is it?", en_opts:["Your fault for not saying no","Your fault for being there","The person who touched you","Both equally"], correct:2,
+    en_exp:"Correct! It is ALWAYS the fault of the person who touched you inappropriately. It is NEVER a child's fault.",
+    hi_q:"अगर कोई आपको बुरे तरीके से छुए तो यह किसकी गलती है?", hi_opts:["आपकी गलती ना न कहने के लिए","आपकी गलती वहां होने के लिए","आपको छूने वाले व्यक्ति की","दोनों की समान रूप से"],
+    hi_exp:"सही! यह हमेशा उस व्यक्ति की गलती है जिसने अनुचित तरीके से छुआ।" },
+  { en_q:"Your private parts are the areas covered by a:", en_opts:["T-shirt","Swimsuit / underwear","Hat","School uniform"], correct:1,
+    en_exp:"Correct! Private parts are those covered by a swimsuit or underwear — chest, bottom, and genitals.",
+    hi_q:"आपके निजी अंग वे क्षेत्र हैं जो इससे ढके होते हैं:", hi_opts:["टी-शर्ट","स्विमसूट / अंडरवियर","टोपी","स्कूल यूनिफॉर्म"],
+    hi_exp:"सही! निजी अंग वे हैं जो स्विमसूट या अंडरवियर से ढके होते हैं।" },
+  { en_q:"If a trusted adult doesn't believe you when you report a bad touch, you should:", en_opts:["Stop trying to tell","Assume you were wrong","Tell another trusted adult","Keep the secret"], correct:2,
+    en_exp:"Correct! If one adult doesn't listen, tell another and keep telling until someone helps you.",
+    hi_q:"अगर कोई विश्वसनीय वयस्क बुरे स्पर्श की रिपोर्ट करने पर आप पर विश्वास नहीं करता, तो आपको:", hi_opts:["बताने की कोशिश बंद कर दें","मान लें कि आप गलत थे","किसी अन्य विश्वसनीय वयस्क को बताएं","रहस्य रखें"],
+    hi_exp:"सही! अगर एक वयस्क नहीं सुनता, तो दूसरे को बताएं और तब तक बताते रहें जब तक कोई मदद न करे।" },
+  { en_q:"Good touches usually make you feel:", en_opts:["Scared and confused","Safe, happy, and loved","Like keeping a secret","Ashamed"], correct:1,
+    en_exp:"Correct! Good touches make you feel safe, happy, and cared for. If a touch makes you feel scared or ashamed, it is a warning sign.",
+    hi_q:"अच्छे स्पर्श आमतौर पर आपको महसूस कराते हैं:", hi_opts:["डरा हुआ और भ्रमित","सुरक्षित, खुश और प्यार पाया हुआ","एक रहस्य रखने जैसा","शर्मिंदा"],
+    hi_exp:"सही! अच्छे स्पर्श आपको सुरक्षित, खुश और देखभाल पाया हुआ महसूस कराते हैं।" }
+];
 
-  let gameCorrect = 0, gameWrong = 0, gameIndex = 0, gameScenarioOrder = [], gameTimer, gameTimeLeft = 30;
+let qIdx=0, qScore=0, qAnswered=false;
 
-  function startGame() {
-    document.getElementById('game-start-screen').style.display = 'none';
-    document.getElementById('game-end-screen').style.display = 'none';
-    document.getElementById('game-play-screen').style.display = 'block';
-    gameCorrect = 0; gameWrong = 0; gameIndex = 0;
-    gameScenarioOrder = [...gameScenarios].sort(() => Math.random() - 0.5);
-    document.getElementById('game-correct').textContent = 0;
-    document.getElementById('game-wrong').textContent = 0;
-    document.getElementById('game-feedback').className = 'game-feedback';
-    document.getElementById('game-next-btn').className = 'game-next-btn';
-    enableGameButtons();
-    loadGameScenario();
-    startTimer();
+function renderQuestion() {
+  const q = quizQuestions[qIdx];
+  const question = currentLang==='hi' ? q.hi_q : q.en_q;
+  const opts = currentLang==='hi' ? q.hi_opts : q.en_opts;
+  document.getElementById('qcounter').textContent = (currentLang==='hi'?'प्रश्न ':'Question ') + (qIdx+1) + (currentLang==='hi'?' में से 15':' of 15');
+  document.getElementById('qprog').style.width = ((qIdx/quizQuestions.length)*100)+'%';
+  document.getElementById('qquestion').textContent = question;
+  const optsEl = document.getElementById('qopts');
+  optsEl.innerHTML = '';
+  const letters=['A','B','C','D'];
+  opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='qopt';
+    btn.innerHTML=`<span class="qletter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick=()=>selectAnswer(i);
+    optsEl.appendChild(btn);
+  });
+  document.getElementById('qfeedback').className='qfeedback';
+  document.getElementById('qnext').style.display='none';
+  qAnswered=false;
+}
+
+function selectAnswer(i) {
+  if(qAnswered) return;
+  qAnswered=true;
+  const q=quizQuestions[qIdx];
+  const exp=currentLang==='hi' ? q.hi_exp : q.en_exp;
+  document.querySelectorAll('.qopt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById('qfeedback');
+  if(i===q.correct){
+    qScore++;
+    document.querySelectorAll('.qopt')[i].classList.add('correct');
+    fb.className='qfeedback correct';
+    document.getElementById('qfbicon').textContent='✅';
+  } else {
+    document.querySelectorAll('.qopt')[i].classList.add('wrong');
+    document.querySelectorAll('.qopt')[q.correct].classList.add('correct');
+    fb.className='qfeedback wrong';
+    document.getElementById('qfbicon').textContent='❌';
   }
+  document.getElementById('qfbtext').textContent=exp;
+  document.getElementById('qnext').style.display='block';
+}
 
-  function startTimer() {
-    clearInterval(gameTimer);
-    gameTimeLeft = 30;
-    document.getElementById('game-timer').textContent = 30;
-    gameTimer = setInterval(() => {
-      gameTimeLeft--;
-      document.getElementById('game-timer').textContent = gameTimeLeft;
-      if (gameTimeLeft <= 0) {
-        clearInterval(gameTimer);
-        gameAnswer(null);
-      }
-    }, 1000);
-  }
+document.getElementById('qnext').onclick=function(){
+  qIdx++;
+  if(qIdx>=quizQuestions.length){
+    document.getElementById('quiz-main').style.display='none';
+    document.getElementById('qresult').style.display='block';
+    document.getElementById('rscore').textContent=qScore;
+    document.getElementById('rtotal').textContent='/ '+quizQuestions.length;
+    const pct=Math.round((qScore/quizQuestions.length)*100);
+    const isHi=currentLang==='hi';
+    if(pct>=80){document.getElementById('rtitle').textContent=isHi?'🌟 उत्कृष्ट!':'🌟 Excellent!';document.getElementById('rmsg').textContent=isHi?`आपने ${pct}% स्कोर किया! आपको शरीर सुरक्षा की बेहतरीन समझ है।`:`You scored ${pct}%! Excellent understanding of body safety!`;}
+    else if(pct>=60){document.getElementById('rtitle').textContent=isHi?'👍 अच्छा काम!':'👍 Good Job!';document.getElementById('rmsg').textContent=isHi?`आपने ${pct}% स्कोर किया। सीखें सेक्शन की समीक्षा करें।`:`You scored ${pct}%. Review the Learn section for more.`;}
+    else{document.getElementById('rtitle').textContent=isHi?'📚 सीखते रहें!':'📚 Keep Learning!';document.getElementById('rmsg').textContent=isHi?`आपने ${pct}% स्कोर किया। शरीर सुरक्षा समझना बहुत जरूरी है!`:`You scored ${pct}%. Body safety is so important — keep learning!`;}
+  } else { renderQuestion(); }
+};
 
-  function loadGameScenario() {
-    if (gameIndex >= gameScenarioOrder.length) { endGame(); return; }
-    const s = gameScenarioOrder[gameIndex];
-    document.getElementById('game-round').textContent = gameIndex + 1;
-    document.getElementById('game-emoji').textContent = s.emoji;
-    document.getElementById('game-text').textContent = s.text;
-    document.getElementById('game-feedback').className = 'game-feedback';
-    document.getElementById('game-next-btn').className = 'game-next-btn';
-    enableGameButtons();
-    startTimer();
-  }
+function restartQuiz(){qIdx=0;qScore=0;document.getElementById('quiz-main').style.display='block';document.getElementById('qresult').style.display='none';renderQuestion();}
+renderQuestion();
 
-  function enableGameButtons() {
-    document.getElementById('btn-good').disabled = false;
-    document.getElementById('btn-bad').disabled = false;
-  }
+// ── GAME ─────────────────────────────────────────────────────────
+const gameScenarios=[
+  {emoji:'🤗',en_t:'Your grandparent gives you a warm hug when you visit them on a holiday.',hi_t:'आपके दादा-दादी छुट्टी में आपसे मिलने पर गर्म गले लगाते हैं।',answer:'good',en_w:'A caring hug from a grandparent is a loving, safe touch!',hi_w:'दादा-दादी का गले लगाना एक प्यार भरा, सुरक्षित स्पर्श है!'},
+  {emoji:'🤝',en_t:'A new classmate extends their hand for a handshake when you first meet.',hi_t:'पहली बार मिलने पर एक नया सहपाठी हाथ मिलाने के लिए हाथ बढ़ाता है।',answer:'good',en_w:'A handshake is a polite, respectful greeting!',hi_w:'हाथ मिलाना एक विनम्र, सम्मानजनक अभिवादन है!'},
+  {emoji:'😨',en_t:"An adult you barely know keeps touching your hair and won't stop even when you say you don't like it.",hi_t:'एक वयस्क जिसे आप शायद ही जानते हैं आपके बाल छूता रहता है और ना कहने के बाद भी नहीं रुकता।',answer:'bad',en_w:'Any touch that continues after you say "no" is a bad touch. Your "no" must be respected.',hi_w:'"नहीं" कहने के बाद भी जारी रहने वाला कोई भी स्पर्श बुरा है।'},
+  {emoji:'⚕️',en_t:'A doctor examines your tummy for pain while your mom sits next to you.',hi_t:'एक डॉक्टर आपके पेट दर्द की जांच करता है जबकि आपकी माँ पास बैठी हैं।',answer:'good',en_w:'A doctor doing a medical exam with a parent present is a safe, necessary touch.',hi_w:'माता-पिता की उपस्थिति में डॉक्टर द्वारा चिकित्सा परीक्षण एक सुरक्षित, आवश्यक स्पर्श है।'},
+  {emoji:'🎁',en_t:'An older neighbor offers to give you a gift in exchange for letting them touch your private parts.',hi_t:'एक बड़ा पड़ोसी आपको उपहार देने की पेशकश करता है यदि आप उन्हें अपने निजी अंगों को छूने दें।',answer:'bad',en_w:'This is a VERY SERIOUS bad touch! Run away, say no, and tell a trusted adult immediately!',hi_w:'यह बहुत गंभीर बुरा स्पर्श है! तुरंत भागें, ना कहें और किसी विश्वसनीय वयस्क को बताएं!'},
+  {emoji:'✋',en_t:'Your best friend gives you a high-five after you both score in a game.',hi_t:'खेल में स्कोर करने के बाद आपका सबसे अच्छा दोस्त आपको हाई-फाइव देता है।',answer:'good',en_w:'High-fives are fun, celebratory, and safe!',hi_w:'हाई-फाइव मज़ेदार, उत्सवपूर्ण और सुरक्षित हैं!'},
+  {emoji:'🤫',en_t:"A family friend touches you and says 'This is our special secret — don't tell your parents.'",hi_t:"एक पारिवारिक मित्र आपको छूता है और कहता है 'यह हमारा खास रहस्य है — अपने माता-पिता को मत बताओ।'",answer:'bad',en_w:"Any touch that requires secrecy is a warning sign. Safe touches don't need to be kept secret!",hi_w:'कोई भी स्पर्श जिसके लिए गोपनीयता की जरूरत हो, वह चेतावनी संकेत है।'},
+  {emoji:'🏃',en_t:"A coach pats your back after you finish a race to say 'well done.'",hi_t:"रेस पूरी करने के बाद एक कोच आपकी पीठ थपथपाता है और 'शाबाश' कहता है।",answer:'good',en_w:'An encouraging pat on the back in a public setting is a positive, supportive touch.',hi_w:'सार्वजनिक स्थान पर प्रोत्साहन के लिए पीठ थपथपाना एक सकारात्मक स्पर्श है।'},
+  {emoji:'😠',en_t:'A classmate pushes you hard and hits your shoulder because you took their toy.',hi_t:'एक सहपाठी आपको जोर से धक्का देता है क्योंकि आपने उनका खिलौना लिया।',answer:'bad',en_w:'Pushing and hitting are bad touches that cause physical harm. Tell a teacher immediately.',hi_w:'धक्का देना और मारना बुरे स्पर्श हैं जो शारीरिक नुकसान पहुंचाते हैं।'},
+  {emoji:'🩺',en_t:'Your school nurse checks your temperature with a thermometer because you feel sick.',hi_t:'आपकी स्कूल नर्स थर्मामीटर से आपका तापमान जांचती है क्योंकि आप बीमार हैं।',answer:'good',en_w:'A nurse checking your temperature is standard medical care and a safe touch.',hi_w:'नर्स द्वारा तापमान जांचना मानक चिकित्सा देखभाल और सुरक्षित स्पर्श है।'},
+  {emoji:'📱',en_t:'Someone you met online asks you to take a photo of your body and send it to them.',hi_t:'ऑनलाइन मिले किसी व्यक्ति ने आपके शरीर की तस्वीर भेजने के लिए कहा।',answer:'bad',en_w:'NEVER share photos of your body online! Tell a trusted adult right away.',hi_w:'अपने शरीर की तस्वीरें कभी ऑनलाइन साझा न करें! तुरंत किसी विश्वसनीय वयस्क को बताएं।'},
+  {emoji:'😔',en_t:"A family member tickles you even after you have said 'stop' and 'no' multiple times.",hi_t:"एक परिवार का सदस्य आपको गुदगुदी करता रहता है, भले ही आपने कई बार 'रुको' और 'नहीं' कहा हो।",answer:'bad',en_w:'Continuing after someone says "stop" ignores your "no" — that makes it a bad touch.',hi_w:'"रुको" कहने के बाद भी जारी रखना आपके "नहीं" को नजरअंदाज करता है।'},
+  {emoji:'❤️',en_t:'Your parent holds your hand while walking through a busy market to keep you safe.',hi_t:'आपके माता-पिता व्यस्त बाजार में चलते समय आपको सुरक्षित रखने के लिए आपका हाथ थामते हैं।',answer:'good',en_w:'A parent holding your hand for safety is a caring, protective touch.',hi_w:'सुरक्षा के लिए माता-पिता का हाथ थामना एक देखभाल भरा, सुरक्षात्मक स्पर्श है।'},
+  {emoji:'🙅',en_t:'Someone shows you pictures of private body parts on their phone and asks if you want to see more.',hi_t:'कोई आपको फोन पर निजी शरीर के अंगों की तस्वीरें दिखाता है और पूछता है कि क्या आप और देखना चाहते हैं।',answer:'bad',en_w:'Showing children inappropriate pictures is WRONG. Leave immediately and tell a trusted adult.',hi_w:'बच्चों को अनुचित तस्वीरें दिखाना गलत है। तुरंत चले जाएं और किसी विश्वसनीय वयस्क को बताएं।'},
+  {emoji:'🤐',en_t:"An older student says you must hug them or they will tell everyone a secret about you.",hi_t:"एक बड़ा छात्र कहता है कि आपको उन्हें गले लगाना होगा वरना वे सभी को आपके बारे में एक रहस्य बताएंगे।",answer:'bad',en_w:'Any touch involving threats or blackmail is absolutely a bad touch. Tell a trusted adult.',hi_w:'धमकी या ब्लैकमेल शामिल कोई भी स्पर्श बिल्कुल बुरा स्पर्श है।'},
+  {emoji:'🏥',en_t:'A nurse gives you an injection at the hospital while your parent holds your hand.',hi_t:'अस्पताल में एक नर्स आपको टीका लगाती है जबकि आपके माता-पिता आपका हाथ थामे हैं।',answer:'good',en_w:'Medical injections by healthcare professionals with a parent present are safe medical care.',hi_w:'माता-पिता की उपस्थिति में स्वास्थ्य पेशेवरों द्वारा इंजेक्शन सुरक्षित चिकित्सा देखभाल है।'},
+  {emoji:'💇',en_t:'A parent washes your hair gently during your bath because you asked for help.',hi_t:'नहाते समय माता-पिता धीरे से आपके बाल धोते हैं क्योंकि आपने मदद मांगी थी।',answer:'good',en_w:'A parent helping with hygiene when you ask is a caring, safe touch.',hi_w:'माता-पिता द्वारा बाल धोना एक देखभाल भरा, सुरक्षित स्पर्श है।'},
+  {emoji:'🙌',en_t:"Your teacher shakes your hand and gives you a certificate for winning a prize.",hi_t:"आपके शिक्षक पुरस्कार जीतने पर आपका हाथ मिलाते हैं और प्रमाण पत्र देते हैं।",answer:'good',en_w:'A formal handshake to congratulate you is a respectful, appropriate touch.',hi_w:'बधाई के लिए औपचारिक हाथ मिलाना एक सम्मानजनक, उचित स्पर्श है।'},
+  {emoji:'😰',en_t:"An adult grabs your arm tightly and forces you to go somewhere you don't want to go.",hi_t:"एक वयस्क आपकी बांह जकड़ लेता है और आपको किसी ऐसी जगह जाने के लिए मजबूर करता है जहाँ आप नहीं जाना चाहते।",answer:'bad',en_w:'Being grabbed and forced to go somewhere is a dangerous bad touch. Shout for help!',hi_w:'पकड़कर जबरदस्ती ले जाना एक खतरनाक बुरा स्पर्श है। मदद के लिए चिल्लाएं!'},
+  {emoji:'👋',en_t:'A friend waves at you from across the room — no touching at all.',hi_t:'एक दोस्त कमरे के पार से आपको हाथ हिलाता है — बिल्कुल कोई स्पर्श नहीं।',answer:'good',en_w:'Waving is a friendly, completely safe way to greet someone.',hi_w:'हाथ हिलाना किसी का अभिवादन करने का एक मैत्रीपूर्ण, पूरी तरह सुरक्षित तरीका है।'}
+];
 
-  function gameAnswer(choice) {
-    clearInterval(gameTimer);
-    document.getElementById('btn-good').disabled = true;
-    document.getElementById('btn-bad').disabled = true;
-    const s = gameScenarioOrder[gameIndex];
-    const fb = document.getElementById('game-feedback');
-    if (choice === s.answer) {
-      gameCorrect++;
-      document.getElementById('game-correct').textContent = gameCorrect;
-      fb.textContent = '✅ Correct! ' + s.why;
-      fb.className = 'game-feedback correct show';
-    } else if (choice === null) {
-      gameWrong++;
-      document.getElementById('game-wrong').textContent = gameWrong;
-      fb.textContent = '⏱ Time\'s up! The answer was: ' + (s.answer === 'good' ? 'Good Touch. ' : 'Bad Touch. ') + s.why;
-      fb.className = 'game-feedback wrong show';
-    } else {
-      gameWrong++;
-      document.getElementById('game-wrong').textContent = gameWrong;
-      fb.textContent = '❌ Not quite. ' + s.why;
-      fb.className = 'game-feedback wrong show';
-    }
-    document.getElementById('game-next-btn').className = 'game-next-btn show';
-  }
+let gCorrect=0,gWrong=0,gIdx=0,gOrder=[],gTimer,gTimeLeft=30,gActive=false;
 
-  function nextGameScenario() {
-    gameIndex++;
-    if (gameIndex >= gameScenarioOrder.length) { endGame(); }
-    else { loadGameScenario(); }
-  }
+function startGame(){
+  document.getElementById('gstart').style.display='none';
+  document.getElementById('gend').style.display='none';
+  document.getElementById('gplay').style.display='block';
+  gCorrect=0;gWrong=0;gIdx=0;gActive=true;
+  gOrder=[...gameScenarios].sort(()=>Math.random()-0.5);
+  document.getElementById('gcorrect').textContent=0;
+  document.getElementById('gwrong').textContent=0;
+  document.getElementById('gfeedback').className='gfeedback';
+  document.getElementById('gnext').className='gnext';
+  enableGBtns();
+  renderScenario();
+  startGTimer();
+}
 
-  function endGame() {
-    clearInterval(gameTimer);
-    document.getElementById('game-play-screen').style.display = 'none';
-    document.getElementById('game-end-screen').style.display = 'block';
-    document.getElementById('final-correct').textContent = gameCorrect;
-    document.getElementById('final-wrong').textContent = gameWrong;
-    const total = gameCorrect + gameWrong;
-    const pct = total > 0 ? Math.round((gameCorrect / total) * 100) : 0;
-    document.getElementById('final-score').textContent = pct + '%';
-    let msg = '';
-    if (pct >= 90) msg = '🌟 Outstanding! You really know your body safety!';
-    else if (pct >= 70) msg = '👍 Great job! A little more practice and you\'ll be an expert!';
-    else if (pct >= 50) msg = '📚 Good effort! Review the learn section and try again!';
-    else msg = '💪 Keep practicing! Visit the Learn section to strengthen your knowledge.';
-    document.getElementById('game-result-msg').textContent = msg;
-  }
+function renderScenario(){
+  if(gIdx>=gOrder.length){endGame();return;}
+  const s=gOrder[gIdx];
+  document.getElementById('ground').textContent=gIdx+1;
+  document.getElementById('gemoji').textContent=s.emoji;
+  document.getElementById('gtext').textContent=currentLang==='hi'?s.hi_t:s.en_t;
+  document.getElementById('gfeedback').className='gfeedback';
+  document.getElementById('gnext').className='gnext';
+  enableGBtns();
+  startGTimer();
+}
 
-  // TIP ACCORDION
-  function toggleTip(header) {
-    const body = header.nextElementSibling;
-    const isOpen = header.classList.contains('open');
-    document.querySelectorAll('.tip-header').forEach(h => {
-      h.classList.remove('open');
-      h.nextElementSibling.classList.remove('open');
-    });
-    if (!isOpen) {
-      header.classList.add('open');
-      body.classList.add('open');
-    }
+function startGTimer(){
+  clearInterval(gTimer);gTimeLeft=30;
+  document.getElementById('gtimer').textContent=30;
+  gTimer=setInterval(()=>{
+    gTimeLeft--;
+    document.getElementById('gtimer').textContent=gTimeLeft;
+    if(gTimeLeft<=0){clearInterval(gTimer);gameAnswer(null);}
+  },1000);
+}
+
+function enableGBtns(){document.getElementById('gbgood').disabled=false;document.getElementById('gbbad').disabled=false;}
+
+function gameAnswer(choice){
+  clearInterval(gTimer);
+  document.getElementById('gbgood').disabled=true;
+  document.getElementById('gbbad').disabled=true;
+  const s=gOrder[gIdx];
+  const why=currentLang==='hi'?s.hi_w:s.en_w;
+  const isHi=currentLang==='hi';
+  const fb=document.getElementById('gfeedback');
+  if(choice===s.answer){
+    gCorrect++;document.getElementById('gcorrect').textContent=gCorrect;
+    fb.textContent='✅ '+(isHi?'सही! ':'Correct! ')+why;
+    fb.className='gfeedback correct show';
+  } else if(choice===null){
+    gWrong++;document.getElementById('gwrong').textContent=gWrong;
+    const ans=s.answer==='good'?(isHi?'अच्छा स्पर्श':'Good Touch'):(isHi?'बुरा स्पर्श':'Bad Touch');
+    fb.textContent=(isHi?'⏱ समय खत्म! उत्तर था: ':'⏱ Time\'s up! Answer: ')+ans+'. '+why;
+    fb.className='gfeedback wrong show';
+  } else {
+    gWrong++;document.getElementById('gwrong').textContent=gWrong;
+    fb.textContent='❌ '+(isHi?'गलत। ':'Not quite. ')+why;
+    fb.className='gfeedback wrong show';
   }
+  document.getElementById('gnext').className='gnext show';
+}
+
+function nextScenario(){gIdx++;if(gIdx>=gOrder.length)endGame();else renderScenario();}
+
+function endGame(){
+  clearInterval(gTimer);gActive=false;
+  document.getElementById('gplay').style.display='none';
+  document.getElementById('gend').style.display='block';
+  document.getElementById('gfcorrect').textContent=gCorrect;
+  document.getElementById('gfwrong').textContent=gWrong;
+  const tot=gCorrect+gWrong;
+  const pct=tot>0?Math.round((gCorrect/tot)*100):0;
+  document.getElementById('gfscore').textContent=pct+'%';
+  const isHi=currentLang==='hi';
+  let msg='';
+  if(pct>=90)msg=isHi?'🌟 शानदार! आप शरीर सुरक्षा के विशेषज्ञ हैं!':'🌟 Outstanding! You really know your body safety!';
+  else if(pct>=70)msg=isHi?'👍 बहुत अच्छा! थोड़ा और अभ्यास करें।':'👍 Great job! A little more practice and you\'ll be an expert!';
+  else if(pct>=50)msg=isHi?'📚 अच्छा प्रयास! सीखें सेक्शन की समीक्षा करें।':'📚 Good effort! Review the Learn section and try again!';
+  else msg=isHi?'💪 अभ्यास जारी रखें! सुरक्षा सीखें।':'💪 Keep practicing! Understanding body safety is vital.';
+  document.getElementById('grmsg').textContent=msg;
+}
+
+// ── ACCORDION ────────────────────────────────────────────────────
+function toggleAcc(header){
+  const body=header.nextElementSibling;
+  const isOpen=header.classList.contains('open');
+  document.querySelectorAll('.acc-head').forEach(h=>{h.classList.remove('open');h.nextElementSibling.classList.remove('open');});
+  if(!isOpen){header.classList.add('open');body.classList.add('open');}
+}
+
+// ── CHARTS ───────────────────────────────────────────────────────
+let chartsInit=false;
+const CHART_COLORS={
+  purple:'rgba(124,58,237,0.85)',purple2:'rgba(124,58,237,0.5)',
+  red:'rgba(220,38,38,0.85)',red2:'rgba(220,38,38,0.5)',
+  amber:'rgba(217,119,6,0.85)',amber2:'rgba(217,119,6,0.5)',
+  green:'rgba(5,150,105,0.85)',green2:'rgba(5,150,105,0.5)',
+  blue:'rgba(37,99,235,0.85)',blue2:'rgba(37,99,235,0.5)',
+  pink:'rgba(219,39,119,0.85)',pink2:'rgba(219,39,119,0.5)',
+  indigo:'rgba(79,70,229,0.85)',
+  teal:'rgba(20,184,166,0.85)',
+  orange:'rgba(234,88,12,0.85)',
+  violet:'rgba(167,139,250,0.85)'
+};
+
+const GRID={color:'rgba(255,255,255,0.05)'};
+const TICK={color:'rgba(255,255,255,0.45)',font:{size:11}};
+const LEGEND={labels:{color:'rgba(255,255,255,0.7)',font:{size:11},boxWidth:12,padding:14}};
+
+function initCharts(){
+  if(chartsInit)return;
+  chartsInit=true;
+
+  Chart.defaults.color='rgba(255,255,255,0.55)';
+  Chart.defaults.borderColor='rgba(255,255,255,0.06)';
+
+  // 1. STATE BAR CHART
+  new Chart(document.getElementById('chartState'),{type:'bar',data:{
+    labels:['Uttar Pradesh','Maharashtra','Madhya Pradesh','Rajasthan','Delhi','West Bengal','Bihar','Karnataka','Tamil Nadu','Gujarat'],
+    datasets:[{label:'Crimes Against Girls (2022)',
+      data:[14553,11804,11416,10098,9684,8231,7144,6839,5910,4212],
+      backgroundColor:[CHART_COLORS.red,CHART_COLORS.orange,CHART_COLORS.red,CHART_COLORS.amber,CHART_COLORS.red,CHART_COLORS.purple,CHART_COLORS.blue,CHART_COLORS.indigo,CHART_COLORS.teal,CHART_COLORS.green],
+      borderRadius:6,borderSkipped:false}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(124,58,237,0.4)',borderWidth:1,titleColor:'#A78BFA',bodyColor:'#E2D9F3',padding:10}},scales:{x:{ticks:{...TICK,maxRotation:35},grid:GRID},y:{ticks:TICK,grid:GRID}}}});
+
+  // 2. LINE TREND
+  new Chart(document.getElementById('chartTrend'),{type:'line',data:{
+    labels:['2018','2019','2020','2021','2022','2023'],
+    datasets:[{label:'Child Sexual Abuse Cases',
+      data:[32608,47335,43261,53874,58766,64200],
+      borderColor:CHART_COLORS.purple,backgroundColor:'rgba(124,58,237,0.12)',
+      tension:0.4,fill:true,pointBackgroundColor:CHART_COLORS.purple,pointRadius:5,pointHoverRadius:7}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:LEGEND,tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(124,58,237,0.4)',borderWidth:1,titleColor:'#A78BFA',bodyColor:'#E2D9F3',padding:10}},scales:{x:{ticks:TICK,grid:GRID},y:{ticks:TICK,grid:GRID}}}});
+
+  // 3. PIE: PERPETRATOR
+  new Chart(document.getElementById('chartPerp'),{type:'pie',data:{
+    labels:['Family Members','Neighbours / Friends','Teachers / Authority','Strangers','Online Contacts'],
+    datasets:[{data:[46,28,10,9,7],
+      backgroundColor:[CHART_COLORS.red,CHART_COLORS.orange,CHART_COLORS.amber,CHART_COLORS.purple,CHART_COLORS.blue],
+      borderColor:'rgba(15,10,30,0.8)',borderWidth:2}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:LEGEND,tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(124,58,237,0.4)',borderWidth:1,titleColor:'#A78BFA',bodyColor:'#E2D9F3',padding:10,callbacks:{label:(c)=>`${c.label}: ${c.raw}%`}}}}});
+
+  // 4. BAR: AGE GROUP
+  new Chart(document.getElementById('chartAge'),{type:'bar',data:{
+    labels:['5–8 yrs','9–12 yrs','13–15 yrs','16–17 yrs','Under 5'],
+    datasets:[{label:'% of Victims',
+      data:[18,32,29,15,6],
+      backgroundColor:[CHART_COLORS.amber,CHART_COLORS.red,CHART_COLORS.orange,CHART_COLORS.purple,CHART_COLORS.blue],
+      borderRadius:8,borderSkipped:false}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(124,58,237,0.4)',borderWidth:1,titleColor:'#A78BFA',bodyColor:'#E2D9F3',padding:10,callbacks:{label:(c)=>`${c.raw}% of victims`}}},scales:{x:{ticks:TICK,grid:GRID},y:{ticks:{...TICK,callback:(v)=>v+'%'},grid:GRID}}}});
+
+  // 5. DOUGHNUT: ABUSE TYPES
+  new Chart(document.getElementById('chartType'),{type:'doughnut',data:{
+    labels:['Sexual Abuse','Physical Abuse','Emotional Abuse','Neglect','Online Abuse'],
+    datasets:[{data:[53,39,47,63,28],
+      backgroundColor:[CHART_COLORS.red,CHART_COLORS.orange,CHART_COLORS.amber,CHART_COLORS.purple,CHART_COLORS.blue],
+      borderColor:'rgba(15,10,30,0.8)',borderWidth:2,hoverOffset:8}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:LEGEND,tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(124,58,237,0.4)',borderWidth:1,titleColor:'#A78BFA',bodyColor:'#E2D9F3',padding:10,callbacks:{label:(c)=>`${c.label}: ${c.raw}% of children`}}}}});
+
+  // 6. BAR: POCSO
+  new Chart(document.getElementById('chartPocso'),{type:'bar',data:{
+    labels:['2018','2019','2020','2021','2022'],
+    datasets:[
+      {label:'POCSO Cases Filed',data:[21605,47335,43261,53874,58766],backgroundColor:CHART_COLORS.red2,borderColor:CHART_COLORS.red,borderWidth:1.5,borderRadius:5,borderSkipped:false},
+      {label:'Cases Convicted',data:[1228,1871,1744,2190,2450],backgroundColor:CHART_COLORS.green2,borderColor:CHART_COLORS.green,borderWidth:1.5,borderRadius:5,borderSkipped:false}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:LEGEND,tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(124,58,237,0.4)',borderWidth:1,titleColor:'#A78BFA',bodyColor:'#E2D9F3',padding:10}},scales:{x:{ticks:TICK,grid:GRID},y:{ticks:TICK,grid:GRID}}}});
+
+  // 7. LINE: CHILDLINE
+  new Chart(document.getElementById('chartChildline'),{type:'line',data:{
+    labels:['2018','2019','2020','2021','2022','2023'],
+    datasets:[{label:'Childline 1098 Calls (thousands)',
+      data:[112,126,119,148,163,180],
+      borderColor:CHART_COLORS.teal,backgroundColor:'rgba(20,184,166,0.1)',
+      tension:0.4,fill:true,pointBackgroundColor:CHART_COLORS.teal,pointRadius:5,pointHoverRadius:7}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:LEGEND,tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(20,184,166,0.4)',borderWidth:1,titleColor:'#5EEAD4',bodyColor:'#E2D9F3',padding:10,callbacks:{label:(c)=>`${c.raw}K calls`}}},scales:{x:{ticks:TICK,grid:GRID},y:{ticks:{...TICK,callback:(v)=>v+'K'},grid:GRID}}}});
+
+  // 8. RADAR: URBAN VS RURAL
+  new Chart(document.getElementById('chartRadar'),{type:'radar',data:{
+    labels:['Awareness','Reporting Rate','Support Access','Conviction Rate','Legal Knowledge','Safe Adults Network'],
+    datasets:[
+      {label:'Urban Areas',data:[72,38,65,18,55,68],borderColor:CHART_COLORS.purple,backgroundColor:'rgba(124,58,237,0.15)',pointBackgroundColor:CHART_COLORS.purple,borderWidth:2,pointRadius:4},
+      {label:'Rural Areas',data:[34,12,22,8,18,29],borderColor:CHART_COLORS.amber,backgroundColor:'rgba(217,119,6,0.1)',pointBackgroundColor:CHART_COLORS.amber,borderWidth:2,pointRadius:4}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:LEGEND,tooltip:{backgroundColor:'rgba(15,10,30,0.95)',borderColor:'rgba(124,58,237,0.4)',borderWidth:1,titleColor:'#A78BFA',bodyColor:'#E2D9F3',padding:10}},scales:{r:{ticks:{color:'rgba(255,255,255,0.35)',backdropColor:'transparent',font:{size:10}},grid:{color:'rgba(255,255,255,0.08)'},pointLabels:{color:'rgba(255,255,255,0.6)',font:{size:10}},suggestedMin:0,suggestedMax:100}}}});
+}
 </script>
 </body>
 </html>
